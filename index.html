@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#0f172a" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
+
     <script type="text/javascript">
         ;window.NREUM||(NREUM={});NREUM.init={browser_consent_mode:{enabled:false},privacy:{cookies_enabled:true},session_replay:{enabled:true,block_selector:'',mask_text_selector:'*',sampling_rate:100.0,error_sampling_rate:100.0,mask_all_inputs:true,collect_fonts:true,inline_images:false,inline_stylesheet:true,fix_stylesheets:true,preload:false,mask_input_options:{}},distributed_tracing:{enabled:true},performance:{capture_measures:true},ajax:{deny_list:["bam.nr-data.net"],capture_payloads:'none'}};
         
@@ -298,27 +299,143 @@
                     <div>
                         <label class="block text-xs font-mono text-slate-300 mb-1.5">Base Shutter Speed (No ND)</label>
                         <select id="exp-base-shutter" onchange="calculateExposure()" class="w-full bg-studio-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
+                            <option value="0.00003125">1/32000 s</option>
+                            <option value="0.0000625">1/16000 s</option>
                             <option value="0.000125">1/8000 s</option>
+                            <option value="0.00015625">1/6400 s</option>
+                            <option value="0.0002">1/5000 s</option>
+                            <option value="0.00025">1/4000 s</option>
+                            <option value="0.0003125">1/3200 s</option>
+                            <option value="0.0004">1/2500 s</option>
+                            <option value="0.0005">1/2000 s</option>
+                            <option value="0.000625">1/1600 s</option>
+                            <option value="0.0008">1/1250 s</option>
+                            <option value="0.001">1/1000 s</option>
+                            <option value="0.00125">1/800 s</option>
+                            <option value="0.0015625">1/640 s</option>
+                            <option value="0.002">1/500 s</option>
+                            <option value="0.0025">1/400 s</option>
+                            <option value="0.003125">1/320 s</option>
                             <option value="0.004">1/250 s</option>
+                            <option value="0.005">1/200 s</option>
+                            <option value="0.00625">1/160 s</option>
+                            <option value="0.008">1/125 s</option>
+                            <option value="0.01">1/100 s</option>
+                            <option value="0.0125">1/80 s</option>
                             <option value="0.016667">1/60 s</option>
+                            <option value="0.02">1/50 s</option>
+                            <option value="0.025">1/40 s</option>
+                            <option value="0.033333">1/30 s</option>
+                            <option value="0.04">1/25 s</option>
+                            <option value="0.05">1/20 s</option>
+                            <option value="0.066667">1/15 s</option>
+                            <option value="0.076923">1/13 s</option>
+                            <option value="0.1">1/10 s</option>
                             <option value="0.125" selected>1/8 s</option>
+                            <option value="0.166667">1/6 s</option>
+                            <option value="0.2">1/5 s</option>
+                            <option value="0.25">1/4 s</option>
+                            <option value="0.333333">1/3 s</option>
+                            <option value="0.4">0.4 s</option>
+                            <option value="0.5">0.5 s</option>
+                            <option value="0.6">0.6 s</option>
+                            <option value="0.8">0.8 s</option>
                             <option value="1">1 s</option>
+                            <option value="1.3">1.3 s</option>
+                            <option value="1.6">1.6 s</option>
+                            <option value="2">2 s</option>
+                            <option value="2.5">2.5 s</option>
+                            <option value="3.2">3.2 s</option>
+                            <option value="4">4 s</option>
+                            <option value="5">5 s</option>
+                            <option value="6">6 s</option>
+                            <option value="8">8 s</option>
+                            <option value="10">10 s</option>
+                            <option value="13">13 s</option>
+                            <option value="15">15 s</option>
+                            <option value="20">20 s</option>
+                            <option value="25">25 s</option>
+                            <option value="30">30 s</option>
+                            <option value="60">1 m</option>
+                            <option value="120">2 m</option>
+                            <option value="240">4 m</option>
+                            <option value="480">8 m</option>
+                            <option value="900">15 m</option>
+                            <option value="1800">30 m</option>
+                            <option value="3600">60 m</option>
                         </select>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-mono text-slate-300 mb-1.5">Aperture</label>
                             <select id="exp-base-aperture" onchange="calculateExposure()" class="w-full bg-studio-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
+                                <option value="0.95">f/0.95</option>
+                                <option value="1.0">f/1.0</option>
+                                <option value="1.1">f/1.1</option>
+                                <option value="1.2">f/1.2</option>
+                                <option value="1.4">f/1.4</option>
+                                <option value="1.6">f/1.6</option>
+                                <option value="1.8">f/1.8</option>
+                                <option value="2.0">f/2.0</option>
+                                <option value="2.2">f/2.2</option>
+                                <option value="2.5">f/2.5</option>
                                 <option value="2.8">f/2.8</option>
+                                <option value="3.2">f/3.2</option>
+                                <option value="3.5">f/3.5</option>
+                                <option value="4.0">f/4.0</option>
+                                <option value="4.5">f/4.5</option>
+                                <option value="5.0">f/5.0</option>
+                                <option value="5.6">f/5.6</option>
+                                <option value="6.3">f/6.3</option>
+                                <option value="7.1">f/7.1</option>
                                 <option value="8.0" selected>f/8.0</option>
-                                <option value="16.0">f/16.0</option>
+                                <option value="9.0">f/9.0</option>
+                                <option value="10">f/10</option>
+                                <option value="11">f/11</option>
+                                <option value="13">f/13</option>
+                                <option value="14">f/14</option>
+                                <option value="16">f/16</option>
+                                <option value="18">f/18</option>
+                                <option value="20">f/20</option>
+                                <option value="22">f/22</option>
+                                <option value="25">f/25</option>
+                                <option value="32">f/32</option>
+                                <option value="45">f/45</option>
+                                <option value="64">f/64</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-mono text-slate-300 mb-1.5">ISO Sensitivity</label>
                             <select id="exp-base-iso" onchange="calculateExposure()" class="w-full bg-studio-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
+                                <option value="25">ISO 25</option>
+                                <option value="50">ISO 50</option>
+                                <option value="64">ISO 64</option>
                                 <option value="100" selected>ISO 100</option>
+                                <option value="125">ISO 125</option>
+                                <option value="160">ISO 160</option>
+                                <option value="200">ISO 200</option>
+                                <option value="250">ISO 250</option>
+                                <option value="320">ISO 320</option>
                                 <option value="400">ISO 400</option>
+                                <option value="500">ISO 500</option>
+                                <option value="640">ISO 640</option>
+                                <option value="800">ISO 800</option>
+                                <option value="1000">ISO 1000</option>
+                                <option value="1250">ISO 1250</option>
+                                <option value="1600">ISO 1600</option>
+                                <option value="2000">ISO 2000</option>
+                                <option value="2500">ISO 2500</option>
+                                <option value="3200">ISO 3200</option>
+                                <option value="4000">ISO 4000</option>
+                                <option value="5000">ISO 5000</option>
+                                <option value="6400">ISO 6400</option>
+                                <option value="8000">ISO 8000</option>
+                                <option value="10000">ISO 10000</option>
+                                <option value="12800">ISO 12800</option>
+                                <option value="25600">ISO 25600</option>
+                                <option value="51200">ISO 51200</option>
+                                <option value="102400">ISO 102400</option>
+                                <option value="204800">ISO 204800</option>
                             </select>
                         </div>
                     </div>
