@@ -15,288 +15,333 @@
     </script>
 
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- EXIF Parsing Library -->
-    <script src="https://cdn.jsdelivr.net/npm/exifreader@4.20.0/dist/exif-reader.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
-    <!-- Unified Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><path d='M42 18v10a3 3 0 0 1-.9 2.1L28 44a22 22 0 1 0 44 0L58.9 30.1A3 3 0 0 1 58 28V18' fill='none' stroke='%2306b6d4' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='58' r='12' fill='%23f59e0b'/></svg>" />
-    <script>
-      tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'], mono: ['JetBrains Mono'] } } } }
-    </script>
-  </head>
-  <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
-    
-    <!-- Unified Navigation Header -->
-    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="index.html" class="flex items-center gap-3 group">
-          <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-purple-500/50 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all">
-            <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" />
-              <circle cx="12" cy="14" r="3" class="stroke-amber-400" />
-            </svg>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-base font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">Aperture<span class="text-amber-400">Lab</span></span>
-            <span class="text-[9px] font-semibold tracking-widest text-slate-400 uppercase -mt-1 hidden sm:block">Studio Suite</span>
-          </div>
-        </a>
-        <nav class="hidden md:flex gap-2 text-xs font-medium">
-          <a href="index.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400 transition">Home</a>
-          <a href="dof-visualizer.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400 transition">DoF Visualizer</a>
-          <a href="exposure-calculator.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400 transition">Exposure & ND</a>
-          <a href="resize-watermark.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400 transition">Resize & Watermark</a>
-          <a href="exif-frame.html" class="px-3 py-1.5 rounded bg-slate-800 text-purple-400 transition">EXIF Frame</a>
-          <a href="panorama-splitter.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400 transition">Panorama Splitter</a>
-        </nav>
-      </div>
-    </header>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EXIF Parsing Library -->
+  <script src="https://cdn.jsdelivr.net/npm/exifreader@4.20.0/dist/exif-reader.js"></script>
   
-    <main class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-      
-      <!-- EXIF Engine Controls -->
-      <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-4 h-fit">
-        <h2 class="text-lg font-bold text-white">EXIF Frame Engine</h2>
-        <input type="file" id="exifFile" accept="image/*" onchange="loadExifImg()" class="w-full text-xs text-slate-400 file:bg-slate-700 file:border-0 file:rounded file:px-3 file:py-1.5 file:text-white cursor-pointer hover:file:bg-slate-600 transition">
-        
-        <div>
-          <label class="text-xs text-slate-400 mb-1 flex justify-between">
-            <span>Frame Thickness</span>
-            <span id="thicknessVal" class="text-purple-400 font-mono">5%</span>
-          </label>
-          <input type="range" id="frameThickness" min="0" max="25" value="5" oninput="updateThickness(); drawFrame()" class="w-full accent-purple-500">
+  <!-- Expanded Typography: Inter (Modern), JetBrains Mono (Tech), Playfair Display (Fine Art) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B0F17">
+  <!-- Unified Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><path d='M42 18v10a3 3 0 0 1-.9 2.1L28 44a22 22 0 1 0 44 0L58.9 30.1A3 3 0 0 1 58 28V18' fill='none' stroke='%2306b6d4' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='58' r='12' fill='%23f59e0b'/></svg>" />
+  
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'], mono: ['JetBrains Mono'], serif: ['Playfair Display'] } } } }
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  </script>
+  <style>.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+  
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between overflow-x-auto no-scrollbar">
+      <a href="index.html" class="flex items-center gap-3 shrink-0 group mr-8">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-purple-500/50 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all">
+          <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" /><circle cx="12" cy="14" r="3" class="stroke-amber-400" /></svg>
         </div>
-  
+        <div class="flex flex-col">
+          <span class="text-base font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">Aperture<span class="text-amber-400">Lab</span></span>
+          <span class="text-[9px] font-semibold tracking-widest text-slate-400 uppercase -mt-1 hidden sm:block">Studio Suite</span>
+        </div>
+      </a>
+      
+      <!-- Unified Navigation Bar -->
+      <nav class="flex items-center gap-1 text-xs font-medium text-slate-300 shrink-0">
+        <a href="index.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Home</a>
+        <a href="dof-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">DoF Visualizer</a>
+        <a href="exposure-calculator.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Exposure & ND</a>
+        <a href="resize-watermark.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Resize & Watermark</a>
+        <a href="exif-frame.html" class="px-3 py-2 rounded-lg bg-slate-800 text-purple-400 font-semibold transition">EXIF Frame</a>
+        <a href="panorama-splitter.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Panorama Splitter</a>
+        <a href="color-palette.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Color Palette</a>
+        <a href="golden-hour.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Golden Hour</a>
+        <a href="print-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Print DPI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+    
+    <!-- EXIF Engine Controls -->
+    <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-4 h-fit">
+      <h2 class="text-lg font-bold text-white">EXIF Frame Engine</h2>
+      <input type="file" id="exifFile" accept="image/*" onchange="loadExifImg()" class="w-full text-xs text-slate-400 file:bg-slate-700 file:border-0 file:rounded file:px-3 file:py-1.5 file:text-white cursor-pointer hover:file:bg-slate-600 transition">
+      
+      <div>
+        <label class="text-xs text-slate-400 mb-1 flex justify-between">
+          <span>Frame Thickness</span>
+          <span id="thicknessVal" class="text-purple-400 font-mono">5%</span>
+        </label>
+        <input type="range" id="frameThickness" min="0" max="25" value="5" oninput="updateThickness(); drawFrame()" class="w-full accent-purple-500">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-slate-400 mb-1 block">Gallery Matte Color</label>
           <select id="bgStyle" onchange="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white">
             <option value="#FFFFFF">Pure White</option>
-            <option value="#F5F0E6" selected>Gallery Warm White (#F5F0E6)</option>
-            <option value="#0F172A">Dark Studio Slate</option>
+            <option value="#F5F0E6" selected>Warm White (#F5F0E6)</option>
+            <option value="#0F172A">Dark Slate</option>
           </select>
         </div>
-  
-        <div class="border-t border-slate-700 pt-3">
-          <label class="text-xs text-slate-400 block mb-1">Camera Brand Logo Override</label>
-          <select id="camBrand" onchange="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
-            <option value="Auto">Auto-Detect Brand</option>
-            <option value="Sony">Sony</option>
-            <option value="Canon">Canon</option>
-            <option value="Nikon">Nikon</option>
-            <option value="Fujifilm">Fujifilm</option>
-            <option value="Panasonic">Panasonic / Lumix</option>
-            <option value="Olympus">Olympus</option>
-            <option value="OM System">OM System</option>
-            <option value="Leica">Leica</option>
-            <option value="Pentax">Pentax</option>
-            <option value="Ricoh">Ricoh</option>
-            <option value="Hasselblad">Hasselblad</option>
-            <option value="Apple">Apple</option>
-            <option value="Google Pixel">Google Pixel</option>
-            <option value="Samsung">Samsung</option>
-            <option value="DJI">DJI</option>
+        <div>
+          <label class="text-xs text-slate-400 mb-1 block">Typography Style</label>
+          <select id="fontStyle" onchange="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white">
+            <option value="modern" selected>Modern Sans</option>
+            <option value="classic">Fine Art Serif</option>
+            <option value="mono">Technical Mono</option>
           </select>
         </div>
-  
-        <div>
-          <label class="text-xs text-slate-400 block mb-1">Extracted Camera Model</label>
-          <input type="text" id="camModel" value="SONY ILCE-7M4" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
-        </div>
-  
-        <div>
-          <label class="text-xs text-slate-400 block mb-1">Extracted Lens Model</label>
-          <input type="text" id="lensModel" value="FE 24-70mm F2.8 GM II" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
-        </div>
-  
-        <div>
-          <label class="text-xs text-slate-400 block mb-1">Exposure Telemetry</label>
-          <input type="text" id="telemetry" value="50mm  f/2.8  1/250s  ISO 100" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
-        </div>
-  
-        <button onclick="downloadFramed()" class="w-full py-3 bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold rounded-xl text-sm transition mt-4 shadow-[0_0_15px_rgba(168,85,247,0.3)]">Export Framed Image</button>
       </div>
-  
-      <!-- Live Canvas Output -->
-      <div class="lg:col-span-3 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex items-center justify-center min-h-[500px] overflow-hidden relative">
-        <canvas id="exifCanvas" class="max-w-full max-h-[800px] rounded shadow-2xl transition-all"></canvas>
-        <div id="placeholder" class="text-slate-500 text-sm absolute">Upload a photo to render gallery frame.</div>
+
+      <div class="border-t border-slate-700 pt-3">
+        <label class="text-xs text-slate-400 block mb-1">Camera Brand Logo Override</label>
+        <select id="camBrand" onchange="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
+          <option value="Auto">Auto-Detect Brand</option>
+          <option value="Sony">Sony</option>
+          <option value="Canon">Canon</option>
+          <option value="Nikon">Nikon</option>
+          <option value="Fujifilm">Fujifilm</option>
+          <option value="Panasonic">Panasonic / Lumix</option>
+          <option value="Olympus">Olympus</option>
+          <option value="OM System">OM System</option>
+          <option value="Leica">Leica</option>
+          <option value="Pentax">Pentax</option>
+          <option value="Ricoh">Ricoh</option>
+          <option value="Hasselblad">Hasselblad</option>
+          <option value="Apple">Apple</option>
+          <option value="Google Pixel">Google Pixel</option>
+          <option value="Samsung">Samsung</option>
+          <option value="DJI">DJI</option>
+        </select>
       </div>
-    </main>
-  
-    <script>
-      // Comprehensive Brand Logo Library
-      const brandLogos = {
-        "Canon": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Canon_logo.svg",
-        "Sony": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg",
-        "Nikon": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Nikon_Logo.svg",
-        "Fujifilm": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Fujifilm_logo.svg",
-        "Panasonic": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Lumix_logo.svg",
-        "Olympus": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Olympus_Corporation_logo.svg",
-        "OM System": "https://upload.wikimedia.org/wikipedia/commons/b/bd/OMDS_OM-System-Logo.svg",
-        "Leica": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Leica_Camera.svg",
-        "Pentax": "https://upload.wikimedia.org/wikipedia/commons/8/81/Pentax_Logo.svg",
-        "Ricoh": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Ricoh_logo_2005.svg",
-        "Hasselblad": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Hasselblad_Logo_2015.png",
-        "Apple": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
-        "Google Pixel": "https://static.vecteezy.com/system/resources/thumbnails/068/842/026/small_2x/google-pixel-logo-emblem-icon-transparent-background-free-png.png",
-        "Samsung": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Samsung_wordmark.svg",
-        "DJI": "https://upload.wikimedia.org/wikipedia/commons/9/9a/DJI_Innovations_logo.svg"
-      };
-  
-      let activeImg = new Image();
-      let preloadedLogos = {};
-      let detectedBrand = "Auto";
-  
-      // Preload logos with CORS to prevent HTML5 Canvas Tainting
-      Object.keys(brandLogos).forEach(brand => {
-        let img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = brandLogos[brand];
-        preloadedLogos[brand] = img;
-      });
-  
-      function updateThickness() {
-        document.getElementById('thicknessVal').innerText = document.getElementById('frameThickness').value + '%';
-      }
-  
-      function loadExifImg() {
-        const file = document.getElementById('exifFile').files[0];
-        if (!file) return;
+
+      <div>
+        <label class="text-xs text-slate-400 block mb-1">Extracted Camera Model</label>
+        <input type="text" id="camModel" value="SONY ILCE-7M4" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400 block mb-1">Extracted Lens Model</label>
+        <input type="text" id="lensModel" value="FE 24-70mm F2.8 GM II" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400 block mb-1">Exposure Telemetry</label>
+        <input type="text" id="telemetry" value="50mm  f/2.8  1/250s  ISO 100" oninput="drawFrame()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white font-mono">
+      </div>
+
+      <button onclick="downloadFramed()" class="w-full py-3 bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold rounded-xl text-sm transition mt-4 shadow-[0_0_15px_rgba(168,85,247,0.3)]">Export Framed Image</button>
+    </div>
+
+    <!-- Live Canvas Output -->
+    <div class="lg:col-span-3 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex items-center justify-center min-h-[500px] overflow-hidden relative">
+      <canvas id="exifCanvas" class="max-w-full max-h-[800px] rounded shadow-2xl transition-all"></canvas>
+      <div id="placeholder" class="text-slate-500 text-sm absolute">Upload a photo to render gallery frame.</div>
+    </div>
+  </main>
+
+  <script>
+    // Comprehensive Brand Logo Library
+    const brandLogos = {
+      "Canon": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Canon_logo.svg",
+      "Sony": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg",
+      "Nikon": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Nikon_Logo.svg",
+      "Fujifilm": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Fujifilm_logo.svg",
+      "Panasonic": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Lumix_logo.svg",
+      "Olympus": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Olympus_Corporation_logo.svg",
+      "OM System": "https://upload.wikimedia.org/wikipedia/commons/b/bd/OMDS_OM-System-Logo.svg",
+      "Leica": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Leica_Camera.svg",
+      "Pentax": "https://upload.wikimedia.org/wikipedia/commons/8/81/Pentax_Logo.svg",
+      "Ricoh": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Ricoh_logo_2005.svg",
+      "Hasselblad": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Hasselblad_Logo_2015.png",
+      "Apple": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "Google Pixel": "https://static.vecteezy.com/system/resources/thumbnails/068/842/026/small_2x/google-pixel-logo-emblem-icon-transparent-background-free-png.png",
+      "Samsung": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Samsung_wordmark.svg",
+      "DJI": "https://upload.wikimedia.org/wikipedia/commons/9/9a/DJI_Innovations_logo.svg"
+    };
+
+    let activeImg = new Image();
+    let preloadedLogos = {};
+    let detectedBrand = "Auto";
+
+    // Preload logos with CORS to prevent HTML5 Canvas Tainting
+    Object.keys(brandLogos).forEach(brand => {
+      let img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = brandLogos[brand];
+      preloadedLogos[brand] = img;
+    });
+
+    function updateThickness() {
+      document.getElementById('thicknessVal').innerText = document.getElementById('frameThickness').value + '%';
+    }
+
+    function loadExifImg() {
+      const file = document.getElementById('exifFile').files[0];
+      if (!file) return;
+      
+      // Parse EXIF Data Client-Side
+      ExifReader.load(file).then(tags => {
+        let make = tags.Make?.description || "";
+        let model = tags.Model?.description || "Unknown Camera";
         
-        // Parse EXIF Data Client-Side
-        ExifReader.load(file).then(tags => {
-          let make = tags.Make?.description || "";
-          let model = tags.Model?.description || "Unknown Camera";
-          
-          let displayModel = (make + " " + model).trim();
-          if(make.toLowerCase() === "apple" && model.toLowerCase().includes("iphone")) {
-              displayModel = model;
-          }
-  
-          document.getElementById('camModel').value = displayModel.toUpperCase();
-          
-          let lens = tags.LensModel?.description || tags.Lens?.description || tags['UndefinedTag:0xA434']?.description || "Unknown Lens";
-          document.getElementById('lensModel').value = lens;
-  
-          let f = tags.FocalLength?.description ? parseFloat(tags.FocalLength.description).toFixed(0) + "mm" : "--mm";
-          let a = tags.FNumber?.description || "f/--";
-          let s = tags.ExposureTime?.description || "--s";
-          let iso = tags.ISOSpeedRatings?.description || "ISO --";
-          document.getElementById('telemetry').value = `${f}  ${a}  ${s}  ISO ${iso}`;
-  
-          detectedBrand = "Auto"; // reset
-          const makeModelStr = (make + " " + model).toLowerCase();
-          
-          const match = Object.keys(brandLogos).find(b => {
-              const lowerB = b.toLowerCase();
-              return makeModelStr.includes(lowerB) || 
-                    (b === "Panasonic" && makeModelStr.includes("lumix")) ||
-                    (b === "OM System" && makeModelStr.includes("om digital"));
-          });
-  
-          if(match) {
-              detectedBrand = match;
-              document.getElementById('camBrand').value = "Auto"; 
-          }
-          
-          drawFrame();
-        }).catch(err => { 
-          console.warn("EXIF read error or no EXIF found", err); 
-          drawFrame(); 
+        let displayModel = (make + " " + model).trim();
+        if(make.toLowerCase() === "apple" && model.toLowerCase().includes("iphone")) {
+            displayModel = model;
+        }
+
+        document.getElementById('camModel').value = displayModel.toUpperCase();
+        
+        let lens = tags.LensModel?.description || tags.Lens?.description || tags['UndefinedTag:0xA434']?.description || "Unknown Lens";
+        document.getElementById('lensModel').value = lens;
+
+        let f = tags.FocalLength?.description ? parseFloat(tags.FocalLength.description).toFixed(0) + "mm" : "--mm";
+        let a = tags.FNumber?.description || "f/--";
+        let s = tags.ExposureTime?.description || "--s";
+        let iso = tags.ISOSpeedRatings?.description || "ISO --";
+        document.getElementById('telemetry').value = `${f}  ${a}  ${s}  ISO ${iso}`;
+
+        detectedBrand = "Auto"; 
+        const makeModelStr = (make + " " + model).toLowerCase();
+        
+        const match = Object.keys(brandLogos).find(b => {
+            const lowerB = b.toLowerCase();
+            return makeModelStr.includes(lowerB) || 
+                  (b === "Panasonic" && makeModelStr.includes("lumix")) ||
+                  (b === "OM System" && makeModelStr.includes("om digital"));
         });
-  
-        const reader = new FileReader();
-        reader.onload = (e) => { 
-          activeImg.src = e.target.result; 
-          activeImg.onload = drawFrame; 
-        };
-        reader.readAsDataURL(file);
-      }
-  
-      function drawFrame() {
-        if (!activeImg.src) return;
-        
-        document.getElementById('placeholder').classList.add('hidden');
-        
-        const canvas = document.getElementById('exifCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        const thicknessPct = parseInt(document.getElementById('frameThickness').value) / 100;
-        const p = activeImg.width * thicknessPct; // Variable Padding
-        
-        // Sizing for text - kept small and tight to the image
-        const baseScale = activeImg.width * 0.032; 
-        const textBarHeight = baseScale * 2.5; // Reduced minimal footprint for EXIF block
-  
-        // Canvas dimensions encompass: Top Padding + Image + Tight Text Bar + Bottom Padding
-        canvas.width = activeImg.width + (p * 2);
-        canvas.height = activeImg.height + (p * 2) + textBarHeight;
-  
-        const bg = document.getElementById('bgStyle').value;
-        const isDark = bg === '#0F172A';
-        
-        // Draw Matte Background
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-        if (bg === '#F5F0E6' && p > 0) {
-          ctx.strokeStyle = 'rgba(0,0,0,0.12)'; 
-          ctx.lineWidth = Math.max(2, activeImg.width * 0.002);
-          ctx.strokeRect(p - ctx.lineWidth, p - ctx.lineWidth, activeImg.width + (ctx.lineWidth*2), activeImg.height + (ctx.lineWidth*2));
+
+        if(match) {
+            detectedBrand = match;
+            document.getElementById('camBrand').value = "Auto"; 
         }
-  
-        // Draw Main Photograph
-        ctx.drawImage(activeImg, p, p);
-  
-        ctx.textBaseline = 'middle';
         
-        // Center the text vertically within the tight text bar immediately beneath the image
-        const textY = p + activeImg.height + (textBarHeight / 2);
+        // Let Google Fonts render before drawing text to canvas
+        document.fonts.ready.then(() => {
+          drawFrame();
+        });
         
-        // Left align, maintaining margin if padding is dropped to 0
-        let logoX = p > 0 ? p : activeImg.width * 0.02; 
-  
-        const manualBrand = document.getElementById('camBrand').value;
-        const targetBrand = manualBrand !== "Auto" ? manualBrand : (detectedBrand !== "Auto" ? detectedBrand : null);
+      }).catch(err => { 
+        console.warn("EXIF read error or no EXIF found", err); 
+        drawFrame(); 
+      });
+
+      const reader = new FileReader();
+      reader.onload = (e) => { 
+        activeImg.src = e.target.result; 
+        activeImg.onload = drawFrame; 
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function drawFrame() {
+      if (!activeImg.src) return;
+      
+      document.getElementById('placeholder').classList.add('hidden');
+      
+      const canvas = document.getElementById('exifCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      const thicknessPct = parseInt(document.getElementById('frameThickness').value) / 100;
+      const p = activeImg.width * thicknessPct; // Variable Padding
+      
+      // Sizing for text - kept small and tight to the image
+      const baseScale = activeImg.width * 0.032; 
+      const textBarHeight = baseScale * 2.5; // Minimal footprint for EXIF block
+
+      canvas.width = activeImg.width + (p * 2);
+      canvas.height = activeImg.height + (p * 2) + textBarHeight;
+
+      const bg = document.getElementById('bgStyle').value;
+      const isDark = bg === '#0F172A';
+      
+      // Draw Matte Background
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (bg === '#F5F0E6' && p > 0) {
+        ctx.strokeStyle = 'rgba(0,0,0,0.12)'; 
+        ctx.lineWidth = Math.max(2, activeImg.width * 0.002);
+        ctx.strokeRect(p - ctx.lineWidth, p - ctx.lineWidth, activeImg.width + (ctx.lineWidth*2), activeImg.height + (ctx.lineWidth*2));
+      }
+
+      // Draw Main Photograph
+      ctx.drawImage(activeImg, p, p);
+
+      ctx.textBaseline = 'middle';
+      
+      // Center the text vertically within the tight text bar immediately beneath the image
+      const textY = p + activeImg.height + (textBarHeight / 2);
+      
+      // Left align, maintaining margin if padding is dropped to 0
+      let logoX = p > 0 ? p : activeImg.width * 0.02; 
+
+      const manualBrand = document.getElementById('camBrand').value;
+      const targetBrand = manualBrand !== "Auto" ? manualBrand : (detectedBrand !== "Auto" ? detectedBrand : null);
+      
+      if (targetBrand && preloadedLogos[targetBrand]) {
+        const logoImg = preloadedLogos[targetBrand];
         
-        if (targetBrand && preloadedLogos[targetBrand]) {
-          const logoImg = preloadedLogos[targetBrand];
-          
-          if (logoImg.complete && logoImg.width > 0) {
-            if(isDark && !["Leica", "Hasselblad", "DJI", "Google Pixel"].includes(targetBrand)) { 
-                ctx.filter = 'invert(1)'; 
-            }
-            
-            const logoHeight = textBarHeight * 0.45; // Fit logo comfortably in minimal bar
-            const logoWidth = logoImg.width * (logoHeight / logoImg.height);
-            ctx.drawImage(logoImg, logoX, textY - (logoHeight/2), logoWidth, logoHeight);
-            
-            ctx.filter = 'none'; 
-            logoX += logoWidth + (baseScale * 0.6); 
+        if (logoImg.complete && logoImg.width > 0) {
+          if(isDark && !["Leica", "Hasselblad", "DJI", "Google Pixel"].includes(targetBrand)) { 
+              ctx.filter = 'invert(1)'; 
           }
+          
+          const logoHeight = textBarHeight * 0.45; // Fit logo comfortably in minimal bar
+          const logoWidth = logoImg.width * (logoHeight / logoImg.height);
+          ctx.drawImage(logoImg, logoX, textY - (logoHeight/2), logoWidth, logoHeight);
+          
+          ctx.filter = 'none'; 
+          logoX += logoWidth + (baseScale * 0.6); 
         }
-  
-        ctx.fillStyle = isDark ? '#FFFFFF' : '#111827';
-        
-        // Camera Model (Bold)
-        ctx.font = '800 ' + (baseScale * 0.8) + 'px Inter, sans-serif';
-        ctx.fillText(document.getElementById('camModel').value, logoX, textY - (baseScale*0.15));
-        
-        // Lens & Exposure Data (Monospace)
-        ctx.font = '600 ' + (baseScale * 0.58) + 'px "JetBrains Mono", monospace';
-        ctx.fillStyle = isDark ? '#94A3B8' : '#64748B';
-        const subText = `${document.getElementById('lensModel').value}   |   ${document.getElementById('telemetry').value}`;
-        ctx.fillText(subText, logoX, textY + (baseScale*0.65));
       }
-  
-      function downloadFramed() {
-        if(!activeImg.src) return;
-        const a = document.createElement('a');
-        a.download = 'framed-exif-gallery.jpg';
-        a.href = document.getElementById('exifCanvas').toDataURL('image/jpeg', 1.0);
-        a.click();
+
+      // ----------------------------------------------------
+      // TYPOGRAPHY INJECTION LOGIC
+      // ----------------------------------------------------
+      const fontSelection = document.getElementById('fontStyle').value;
+      let mainFontFamily, subFontFamily;
+
+      switch(fontSelection) {
+        case 'classic':
+          mainFontFamily = '"Playfair Display", serif';
+          subFontFamily = '"Playfair Display", serif';
+          break;
+        case 'mono':
+          mainFontFamily = '"JetBrains Mono", monospace';
+          subFontFamily = '"JetBrains Mono", monospace';
+          break;
+        case 'modern':
+        default:
+          mainFontFamily = 'Inter, sans-serif';
+          subFontFamily = '"JetBrains Mono", monospace';
+          break;
       }
-    </script>
-  </body>
-  </html>
+
+      ctx.fillStyle = isDark ? '#FFFFFF' : '#111827';
+      
+      // Render Camera Model (Main Text)
+      ctx.font = '800 ' + (baseScale * 0.8) + 'px ' + mainFontFamily;
+      ctx.fillText(document.getElementById('camModel').value, logoX, textY - (baseScale*0.15));
+      
+      // Render Lens & Exposure Data (Sub Text)
+      ctx.font = '600 ' + (baseScale * 0.58) + 'px ' + subFontFamily;
+      ctx.fillStyle = isDark ? '#94A3B8' : '#64748B';
+      const subText = `${document.getElementById('lensModel').value}   |   ${document.getElementById('telemetry').value}`;
+      ctx.fillText(subText, logoX, textY + (baseScale*0.65));
+    }
+
+    function downloadFramed() {
+      if(!activeImg.src) return;
+      const a = document.createElement('a');
+      a.download = 'framed-exif-gallery.jpg';
+      a.href = document.getElementById('exifCanvas').toDataURL('image/jpeg', 1.0);
+      a.click();
+    }
+  </script>
+</body>
+</html>

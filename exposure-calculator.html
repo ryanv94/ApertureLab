@@ -17,38 +17,43 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Unified Favicon -->
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B0F17">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><path d='M42 18v10a3 3 0 0 1-.9 2.1L28 44a22 22 0 1 0 44 0L58.9 30.1A3 3 0 0 1 58 28V18' fill='none' stroke='%2306b6d4' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='58' r='12' fill='%23f59e0b'/></svg>" />
-  <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'], mono: ['JetBrains Mono'] } } } }</script>
+  
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'], mono: ['JetBrains Mono'] } } } }
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  </script>
+  <style>.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <!-- Unified Header Logo -->
-      <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-cyan-500/50 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.25)] transition-all">
-          <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" />
-            <circle cx="12" cy="14" r="3" class="stroke-amber-400" />
-          </svg>
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between overflow-x-auto no-scrollbar">
+      <a href="index.html" class="flex items-center gap-3 shrink-0 group mr-8">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-amber-500/50 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] transition-all">
+          <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" /><circle cx="12" cy="14" r="3" class="stroke-amber-400" /></svg>
         </div>
         <div class="flex flex-col">
           <span class="text-base font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">Aperture<span class="text-amber-400">Lab</span></span>
           <span class="text-[9px] font-semibold tracking-widest text-slate-400 uppercase -mt-1 hidden sm:block">Studio Suite</span>
         </div>
       </a>
-      <nav class="hidden md:flex gap-2 text-xs font-medium">
-        <a href="index.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400">Home</a>
-        <a href="dof-visualizer.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400">DoF Visualizer</a>
-        <a href="exposure-calculator.html" class="px-3 py-1.5 rounded bg-slate-800 text-amber-400">Exposure & ND</a>
-        <a href="resize-watermark.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400">Resize & Watermark</a>
-        <a href="exif-frame.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400">EXIF Frame</a>
-        <a href="panorama-splitter.html" class="px-3 py-1.5 rounded hover:text-white text-slate-400">Panorama Splitter</a>
+      <nav class="flex items-center gap-1 text-xs font-medium text-slate-300 shrink-0">
+        <a href="index.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Home</a>
+        <a href="dof-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">DoF Visualizer</a>
+        <a href="exposure-calculator.html" class="px-3 py-2 rounded-lg bg-slate-800 text-amber-400 font-semibold transition">Exposure & ND</a>
+        <a href="resize-watermark.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Resize & Watermark</a>
+        <a href="exif-frame.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">EXIF Frame</a>
+        <a href="panorama-splitter.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Panorama Splitter</a>
+        <a href="color-palette.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Color Palette</a>
+        <a href="golden-hour.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Golden Hour</a>
+        <a href="print-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Print DPI</a>
       </nav>
     </div>
   </header>
   <main class="flex-grow max-w-5xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Same robust exposure engine as previous response -->
     <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-4">
       <h2 class="text-lg font-bold text-white flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-400"></span> 1. Base Exposure</h2>
       <div><label class="text-xs text-slate-400 font-semibold">Metered Shutter Speed</label><select id="baseShutter" onchange="calcExposure()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white"></select></div>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panorama Splitter — ApertureLab</title>
+  <title>Print Size & DPI Visualizer — ApertureLab</title>
+
 
   <script type="text/javascript">
     ;window.NREUM||(NREUM={});NREUM.init={browser_consent_mode:{enabled:false},privacy:{cookies_enabled:true},session_replay:{enabled:true,block_selector:'',mask_text_selector:'*',sampling_rate:100.0,error_sampling_rate:100.0,mask_all_inputs:true,collect_fonts:true,inline_images:false,inline_stylesheet:true,fix_stylesheets:true,preload:false,mask_input_options:{}},distributed_tracing:{enabled:true},performance:{capture_measures:true},ajax:{deny_list:["bam.nr-data.net"],capture_payloads:'none'}};
@@ -16,24 +17,23 @@
 
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0B0F17">
+  <!-- Unified Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><path d='M42 18v10a3 3 0 0 1-.9 2.1L28 44a22 22 0 1 0 44 0L58.9 30.1A3 3 0 0 1 58 28V18' fill='none' stroke='%2306b6d4' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='58' r='12' fill='%23f59e0b'/></svg>" />
-  
   <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'] } } } }
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter'], mono: ['JetBrains Mono'] } } } }
     if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
   </script>
   <style>.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+  
   <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between overflow-x-auto no-scrollbar">
       <a href="index.html" class="flex items-center gap-3 shrink-0 group mr-8">
-        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-sky-500/50 group-hover:shadow-[0_0_15px_rgba(14,165,233,0.25)] transition-all">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-emerald-400/50 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.25)] transition-all">
           <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" /><circle cx="12" cy="14" r="3" class="stroke-amber-400" /></svg>
         </div>
         <div class="flex flex-col">
@@ -41,52 +41,123 @@
           <span class="text-[9px] font-semibold tracking-widest text-slate-400 uppercase -mt-1 hidden sm:block">Studio Suite</span>
         </div>
       </a>
+      
+      <!-- Corrected Full Navigation Bar -->
       <nav class="flex items-center gap-1 text-xs font-medium text-slate-300 shrink-0">
         <a href="index.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Home</a>
         <a href="dof-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">DoF Visualizer</a>
         <a href="exposure-calculator.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Exposure & ND</a>
         <a href="resize-watermark.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Resize & Watermark</a>
         <a href="exif-frame.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">EXIF Frame</a>
-        <a href="panorama-splitter.html" class="px-3 py-2 rounded-lg bg-slate-800 text-sky-400 font-semibold transition">Panorama Splitter</a>
+        <a href="panorama-splitter.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Panorama Splitter</a>
         <a href="color-palette.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Color Palette</a>
         <a href="golden-hour.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Golden Hour</a>
-        <a href="print-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Print DPI</a>
+        <a href="print-visualizer.html" class="px-3 py-2 rounded-lg bg-slate-800 text-emerald-400 font-semibold transition">Print DPI</a>
       </nav>
     </div>
   </header>
+
   <main class="flex-grow max-w-6xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-4">
-      <h2 class="text-lg font-bold text-white">Carousel Config</h2>
-      <input type="file" id="panoInput" accept="image/*" onchange="splitPano()" class="w-full text-xs text-slate-400 file:bg-slate-700 file:border-0 file:rounded file:px-3 file:py-1 file:text-white">
-      <div><label class="text-xs text-slate-400">Target Aspect Ratio</label><select id="aspect" onchange="splitPano()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white"><option value="0.8">IG Portrait (4:5)</option><option value="1.0">IG Square (1:1)</option></select></div>
-      <div><label class="text-xs text-slate-400">Number of Slices</label><input type="number" id="slices" min="2" max="10" value="3" onchange="splitPano()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white"></div>
-      <button onclick="downloadZip()" class="w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-xl text-sm transition mt-4">Download All Slices (.ZIP)</button>
+    <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-6 h-fit">
+      <div>
+        <h2 class="text-lg font-bold text-white mb-2">Image Dimensions</h2>
+        <input type="file" id="printImg" accept="image/*" onchange="loadPrintImg()" class="w-full text-xs text-slate-400 file:bg-slate-700 file:border-0 file:rounded file:px-3 file:py-1.5 file:text-white cursor-pointer hover:file:bg-slate-600 transition">
+        <div class="mt-2 text-xs text-slate-400 font-mono" id="dimOutput">Loaded: -- px x -- px</div>
+      </div>
+      
+      <div>
+        <label class="text-xs text-slate-400 font-semibold mb-1 block">Target Print Size</label>
+        <select id="printSize" onchange="calcDPI()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+          <option value="4x6">4 x 6 inches (Standard Photo)</option>
+          <option value="5x7">5 x 7 inches</option>
+          <option value="8x10" selected>8 x 10 inches (Portrait)</option>
+          <option value="11x14">11 x 14 inches</option>
+          <option value="16x20">16 x 20 inches (Large Canvas)</option>
+          <option value="24x36">24 x 36 inches (Poster)</option>
+        </select>
+      </div>
+
+      <div class="bg-slate-900/80 rounded-xl border border-slate-700 p-4 text-center">
+        <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-1">Effective Print Resolution</div>
+        <div id="dpiResult" class="text-5xl font-extrabold font-mono text-white tracking-tighter">--- <span class="text-xl">DPI</span></div>
+        <div id="dpiStatus" class="mt-2 text-xs font-bold px-3 py-1 rounded-full inline-block bg-slate-800 text-slate-400">Awaiting Image</div>
+      </div>
     </div>
-    <div id="previewContainer" class="lg:col-span-2 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex items-center justify-center gap-2 overflow-x-auto min-h-[300px]">
-      <span class="text-xs text-slate-400">Upload a panorama image...</span>
+
+    <div class="lg:col-span-2 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[500px]">
+      <div class="text-xs text-slate-400 mb-4 font-mono uppercase tracking-widest text-center">Visual Crop Boundary</div>
+      <div class="relative flex items-center justify-center w-full h-[400px]">
+        <canvas id="cropCanvas" class="max-w-full max-h-full rounded shadow-xl hidden"></canvas>
+        <div id="placeholder" class="text-slate-500 text-sm absolute">Upload an image to visualize the print crop.</div>
+      </div>
     </div>
   </main>
+
   <script>
-    let panoImg = new Image(), generatedCanvases = [];
-    function splitPano() {
-      const file = document.getElementById('panoInput').files[0]; if (!file) return;
-      const reader = new FileReader(); reader.onload = (e) => { panoImg.src = e.target.result; panoImg.onload = renderSlices; }; reader.readAsDataURL(file);
+    let activeImg = new Image();
+
+    function loadPrintImg() {
+      const file = document.getElementById('printImg').files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => { 
+        activeImg.src = e.target.result; 
+        activeImg.onload = () => {
+          document.getElementById('dimOutput').innerText = `Loaded: ${activeImg.width}px × ${activeImg.height}px`;
+          calcDPI();
+        }; 
+      };
+      reader.readAsDataURL(file);
     }
-    function renderSlices() {
-      const container = document.getElementById('previewContainer'); container.innerHTML = ''; generatedCanvases = [];
-      const numSlices = parseInt(document.getElementById('slices').value);
-      const sliceW = panoImg.width / numSlices, sliceH = panoImg.height;
-      for(let i=0; i<numSlices; i++) {
-        const c = document.createElement('canvas'); c.width = sliceW; c.height = sliceH;
-        c.getContext('2d').drawImage(panoImg, i*sliceW, 0, sliceW, sliceH, 0, 0, sliceW, sliceH);
-        c.className = "h-48 rounded border border-slate-700 shadow"; container.appendChild(c); generatedCanvases.push(c);
+
+    function calcDPI() {
+      if (!activeImg.src) return;
+      document.getElementById('placeholder').classList.add('hidden');
+      const canvas = document.getElementById('cropCanvas');
+      canvas.classList.remove('hidden');
+      const ctx = canvas.getContext('2d');
+
+      const sizeArr = document.getElementById('printSize').value.split('x');
+      const printW = parseFloat(sizeArr[0]);
+      const printH = parseFloat(sizeArr[1]);
+      const printAspect = printW / printH;
+      const imgAspect = activeImg.width / activeImg.height;
+
+      let effectiveDPI = 0, sWidth = activeImg.width, sHeight = activeImg.height, sx = 0, sy = 0;
+
+      if (imgAspect > printAspect) {
+        effectiveDPI = activeImg.height / printH;
+        sHeight = activeImg.height; sWidth = activeImg.height * printAspect; sx = (activeImg.width - sWidth) / 2;
+      } else {
+        effectiveDPI = activeImg.width / printW;
+        sWidth = activeImg.width; sHeight = activeImg.width / printAspect; sy = (activeImg.height - sHeight) / 2;
       }
-    }
-    function downloadZip() {
-      if(!generatedCanvases.length) return;
-      const zip = new JSZip();
-      generatedCanvases.forEach((c, i) => zip.file(`slice_${i+1}.jpg`, c.toDataURL('image/jpeg', 0.95).split(',')[1], {base64: true}));
-      zip.generateAsync({type:"blob"}).then(blob => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "carousel.zip"; a.click(); });
+
+      effectiveDPI = Math.round(effectiveDPI);
+
+      const dpiEl = document.getElementById('dpiResult'), statusEl = document.getElementById('dpiStatus');
+      dpiEl.innerHTML = `${effectiveDPI} <span class="text-xl">DPI</span>`;
+
+      if (effectiveDPI >= 300) {
+        dpiEl.className = "text-5xl font-extrabold font-mono text-emerald-400 tracking-tighter";
+        statusEl.className = "mt-2 text-xs font-bold px-3 py-1 rounded-full inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        statusEl.innerText = "Excellent Quality (Fine Art / Magazine)";
+      } else if (effectiveDPI >= 150) {
+        dpiEl.className = "text-5xl font-extrabold font-mono text-amber-400 tracking-tighter";
+        statusEl.className = "mt-2 text-xs font-bold px-3 py-1 rounded-full inline-block bg-amber-500/20 text-amber-400 border border-amber-500/30";
+        statusEl.innerText = "Good Quality (Standard Wall Print)";
+      } else {
+        dpiEl.className = "text-5xl font-extrabold font-mono text-rose-500 tracking-tighter";
+        statusEl.className = "mt-2 text-xs font-bold px-3 py-1 rounded-full inline-block bg-rose-500/20 text-rose-400 border border-rose-500/30";
+        statusEl.innerText = "Low Resolution (Pixelation Likely)";
+      }
+
+      const displayScale = 500 / Math.max(sWidth, sHeight);
+      canvas.width = sWidth * displayScale; canvas.height = sHeight * displayScale;
+      ctx.drawImage(activeImg, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+      
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; ctx.lineWidth = 2;
+      ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
     }
   </script>
 </body>
