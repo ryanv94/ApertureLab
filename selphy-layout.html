@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SELPHY Magnet Layout — ApertureLab</title>
+  
+  <!-- New Relic Browser Monitoring -->
+  <script src="nr.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Cropper.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B0F17">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><path d='M42 18v10a3 3 0 0 1-.9 2.1L28 44a22 22 0 1 0 44 0L58.9 30.1A3 3 0 0 1 58 28V18' fill='none' stroke='%2306b6d4' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='58' r='12' fill='%23f59e0b'/></svg>" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+    }
+  </script>
+  
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .cropper-bg {
+      background-image: linear-gradient(45deg, #0f172a 25%, transparent 25%), linear-gradient(-45deg, #0f172a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #0f172a 75%), linear-gradient(-45deg, transparent 75%, #0f172a 75%) !important;
+      background-size: 20px 20px !important;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px !important;
+    }
+    .cropper-view-box { outline: 2px solid #06b6d4 !important; }
+    .cropper-line, .cropper-point { background-color: #06b6d4 !important; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-900">
+
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between overflow-x-auto no-scrollbar">
+      <a href="index.html" class="flex items-center gap-3 shrink-0 group mr-8">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-indigo-500/50 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.25)] transition-all">
+          <svg class="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 2v3a1 1 0 0 1-.3.7L6.5 9.5a7 7 0 1 0 11 0L14.3 5.7A1 1 0 0 1 14 5V2" />
+            <circle cx="12" cy="14" r="3" class="stroke-amber-400" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-base font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">Aperture<span class="text-amber-400">Lab</span></span>
+          <span class="text-[9px] font-semibold tracking-widest text-slate-400 uppercase -mt-1 hidden sm:block">Studio Suite</span>
+        </div>
+      </a>
+      
+      <nav class="flex items-center gap-1 text-xs font-medium text-slate-300 shrink-0">
+        <a href="index.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Home</a>
+        <a href="dof-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">DoF Visualizer</a>
+        <a href="exposure-calculator.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Exposure & ND</a>
+        <a href="resize-watermark.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Resize & Watermark</a>
+        <a href="exif-frame.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">EXIF Frame</a>
+        <a href="panorama-splitter.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Panorama Splitter</a>
+        <a href="color-palette.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Color Palette</a>
+        <a href="golden-hour.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Golden Hour</a>
+        <a href="print-visualizer.html" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition">Print DPI</a>
+        <a href="selphy-layout.html" class="px-3 py-2 rounded-lg bg-slate-800 text-indigo-400 font-semibold transition">Magnet Layout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 space-y-6 h-fit">
+      <div>
+        <h2 class="text-lg font-bold text-white mb-1">SELPHY Magnet Layout</h2>
+        <p class="text-xs text-slate-400">Fits two 45×70mm fridge magnets onto a 4×6" print sheet (1800×1200 px @ 300 DPI).</p>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-xs text-slate-400 font-semibold uppercase tracking-wider font-mono">Magnet Slots</h3>
+        
+        <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-700/80 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-200">Magnet Slot 1 (45×70mm)</span>
+            <button id="btnClear1" class="text-xs text-rose-400 hover:text-rose-300 hidden font-semibold transition">Remove</button>
+          </div>
+          <button id="btnUpload1" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-600/80 rounded-lg text-xs font-medium text-slate-200 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Upload Photo 1
+          </button>
+        </div>
+
+        <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-700/80 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-200">Magnet Slot 2 (45×70mm)</span>
+            <button id="btnClear2" class="text-xs text-rose-400 hover:text-rose-300 hidden font-semibold transition">Remove</button>
+          </div>
+          <button id="btnUpload2" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-600/80 rounded-lg text-xs font-medium text-slate-200 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Upload Photo 2
+          </button>
+        </div>
+      </div>
+
+      <button id="btnDownload" disabled class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        Download Print File (1800×1200 JPEG)
+      </button>
+    </div>
+
+    <div class="lg:col-span-2 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[450px]">
+      <div class="text-xs text-slate-400 mb-3 font-mono uppercase tracking-widest text-center">4×6 Inch Sheet Preview (Trim & Cut Guides Included)</div>
+      <div class="w-full aspect-[3/2] max-w-[700px] rounded-lg overflow-hidden border border-slate-700 shadow-2xl bg-white relative">
+        <canvas id="previewCanvas" width="1800" height="1200" class="w-full h-full block"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" class="hidden">
+
+  <div id="cropperModal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col">
+      
+      <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+          Crop & Orient Magnet Photo (45:70 Ratio)
+        </h3>
+        <button id="btnCloseModal" class="text-slate-400 hover:text-white p-1 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <div class="bg-slate-950 p-4 w-full h-[55vh] max-h-[550px] flex items-center justify-center overflow-hidden">
+        <img id="cropperImage" src="" alt="To Crop" class="max-w-full max-h-full">
+      </div>
+      
+      <div class="p-4 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="flex gap-2 w-full sm:w-auto">
+          <button id="btnRotateLeft" class="flex-1 sm:flex-none px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+            Rotate Left
+          </button>
+          <button id="btnRotateRight" class="flex-1 sm:flex-none px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition">
+            Rotate Right
+            <svg class="w-4 h-4 transform scale-x-[-1]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+          </button>
+        </div>
+        
+        <div class="flex gap-2 w-full sm:w-auto">
+          <button id="btnCancelCrop" class="flex-1 sm:flex-none px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-300 transition">
+            Cancel
+          </button>
+          <button id="btnSaveCrop" class="flex-1 sm:flex-none px-5 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white transition shadow-sm">
+            Apply & Crop
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CANVAS_WIDTH = 1800;  
+    const CANVAS_HEIGHT = 1200; 
+    
+    const SLOT_WIDTH = 531;
+    const SLOT_HEIGHT = 827;
+    const ASPECT_RATIO = 45 / 70;
+
+    let slots = [null, null]; 
+    let activeSlotIndex = null;
+    let cropperInstance = null;
+
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    const btnUpload1 = document.getElementById('btnUpload1');
+    const btnUpload2 = document.getElementById('btnUpload2');
+    const btnClear1 = document.getElementById('btnClear1');
+    const btnClear2 = document.getElementById('btnClear2');
+    
+    const fileInput = document.getElementById('fileInput');
+    const btnDownload = document.getElementById('btnDownload');
+    
+    const cropperModal = document.getElementById('cropperModal');
+    const cropperImage = document.getElementById('cropperImage');
+    const btnRotateLeft = document.getElementById('btnRotateLeft');
+    const btnRotateRight = document.getElementById('btnRotateRight');
+    const btnSaveCrop = document.getElementById('btnSaveCrop');
+    const btnCancelCrop = document.getElementById('btnCancelCrop');
+    const btnCloseModal = document.getElementById('btnCloseModal');
+
+    const slot1X = 600 - (SLOT_WIDTH / 2);
+    const slot1Y = (CANVAS_HEIGHT - SLOT_HEIGHT) / 2;
+    
+    const slot2X = 1200 - (SLOT_WIDTH / 2);
+    const slot2Y = (CANVAS_HEIGHT - SLOT_HEIGHT) / 2;
+
+    const slotBounds = [
+      { x: slot1X, y: slot1Y, w: SLOT_WIDTH, h: SLOT_HEIGHT },
+      { x: slot2X, y: slot2Y, w: SLOT_WIDTH, h: SLOT_HEIGHT }
+    ];
+
+    function drawCanvas() {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      for (let i = 0; i < 2; i++) {
+        const bounds = slotBounds[i];
+        const img = slots[i];
+
+        if (img) {
+          ctx.drawImage(img, bounds.x, bounds.y, bounds.w, bounds.h);
+          drawCutGuides(bounds.x, bounds.y, bounds.w, bounds.h);
+        } else {
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.03)';
+          ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
+          
+          ctx.strokeStyle = 'rgba(100, 116, 139, 0.3)';
+          ctx.lineWidth = 4;
+          ctx.setLineDash([15, 15]);
+          ctx.strokeRect(bounds.x + 2, bounds.y + 2, bounds.w - 4, bounds.h - 4);
+          ctx.setLineDash([]); 
+          
+          ctx.fillStyle = 'rgba(71, 85, 105, 0.6)';
+          ctx.font = '700 30px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`Magnet ${i+1}`, bounds.x + bounds.w/2, bounds.y + bounds.h/2 - 18);
+          
+          ctx.font = '600 22px "JetBrains Mono", monospace';
+          ctx.fillStyle = 'rgba(100, 116, 139, 0.5)';
+          ctx.fillText('45 × 70 mm', bounds.x + bounds.w/2, bounds.y + bounds.h/2 + 22);
+        }
+      }
+
+      btnDownload.disabled = !(slots[0] || slots[1]);
+    }
+
+    function drawCutGuides(x, y, w, h) {
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      ctx.strokeRect(x, y, w, h);
+
+      const offset = 12;
+      const len = 24;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      ctx.lineWidth = 2;
+      
+      ctx.beginPath();
+      ctx.moveTo(x - offset, y); ctx.lineTo(x - offset - len, y);
+      ctx.moveTo(x, y - offset); ctx.lineTo(x, y - offset - len);
+      ctx.moveTo(x + w + offset, y); ctx.lineTo(x + w + offset + len, y);
+      ctx.moveTo(x + w, y - offset); ctx.lineTo(x + w, y - offset - len);
+      ctx.moveTo(x - offset, y + h); ctx.lineTo(x - offset - len, y + h);
+      ctx.moveTo(x, y + h + offset); ctx.lineTo(x, y + h + offset + len);
+      ctx.moveTo(x + w + offset, y + h); ctx.lineTo(x + w + offset + len, y + h);
+      ctx.moveTo(x + w, y + h + offset); ctx.lineTo(x + w, y + h + offset + len);
+      
+      ctx.stroke();
+    }
+
+    btnUpload1.addEventListener('click', () => triggerUpload(0));
+    btnUpload2.addEventListener('click', () => triggerUpload(1));
+    btnClear1.addEventListener('click', () => clearSlot(0));
+    btnClear2.addEventListener('click', () => clearSlot(1));
+
+    function triggerUpload(index) {
+      activeSlotIndex = index;
+      fileInput.value = ''; 
+      fileInput.click();
+    }
+
+    function clearSlot(index) {
+      slots[index] = null;
+      updateUI();
+      drawCanvas();
+    }
+
+    function updateUI() {
+      if (slots[0]) {
+        btnUpload1.innerHTML = `<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Change Photo 1`;
+        btnClear1.classList.remove('hidden');
+      } else {
+        btnUpload1.innerHTML = `<svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Upload Photo 1`;
+        btnClear1.classList.add('hidden');
+      }
+
+      if (slots[1]) {
+        btnUpload2.innerHTML = `<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Change Photo 2`;
+        btnClear2.classList.remove('hidden');
+      } else {
+        btnUpload2.innerHTML = `<svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Upload Photo 2`;
+        btnClear2.classList.add('hidden');
+      }
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => openCropper(event.target.result);
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function openCropper(imageSrc) {
+      cropperImage.src = imageSrc;
+      cropperModal.classList.remove('hidden');
+      
+      if (cropperInstance) cropperInstance.destroy();
+
+      cropperInstance = new Cropper(cropperImage, {
+        aspectRatio: ASPECT_RATIO,
+        viewMode: 2,
+        dragMode: 'move',
+        autoCropArea: 1,
+        restore: false,
+        guides: true,
+        center: true,
+        highlight: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        toggleDragModeOnDblclick: false,
+      });
+    }
+
+    function closeCropper() {
+      cropperModal.classList.add('hidden');
+      if (cropperInstance) {
+        cropperInstance.destroy();
+        cropperInstance = null;
+      }
+      cropperImage.src = '';
+    }
+
+    btnRotateLeft.addEventListener('click', () => { if (cropperInstance) cropperInstance.rotate(-90); });
+    btnRotateRight.addEventListener('click', () => { if (cropperInstance) cropperInstance.rotate(90); });
+    btnCancelCrop.addEventListener('click', closeCropper);
+    btnCloseModal.addEventListener('click', closeCropper);
+
+    btnSaveCrop.addEventListener('click', () => {
+      if (!cropperInstance) return;
+
+      const croppedCanvas = cropperInstance.getCroppedCanvas({
+        width: SLOT_WIDTH,
+        height: SLOT_HEIGHT,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+      });
+
+      const img = new Image();
+      img.onload = () => {
+        slots[activeSlotIndex] = img;
+        updateUI();
+        drawCanvas();
+        closeCropper();
+      };
+      img.src = croppedCanvas.toDataURL('image/png');
+    });
+
+    btnDownload.addEventListener('click', () => {
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.98);
+      const link = document.createElement('a');
+      link.download = `ApertureLab-SelphyMagnets-${Date.now()}.jpg`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    window.onload = () => drawCanvas();
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aperturelab-v1';
+const CACHE_NAME = 'aperturelab-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -7,7 +7,10 @@ const ASSETS = [
   '/resize-watermark.html',
   '/exif-frame.html',
   '/panorama-splitter.html',
-  '/color-palette.html'
+  '/color-palette.html',
+  '/golden-hour.html',
+  '/print-visualizer.html',
+  '/selphy-layout.html'
 ];
 
 self.addEventListener('install', (e) => {
