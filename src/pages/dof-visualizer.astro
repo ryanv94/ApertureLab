@@ -1,9 +1,80 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import Slider from '../components/Slider.astro';
+import NumberField from '../components/NumberField.astro';
+import Select from '../components/Select.astro';
+import Segmented from '../components/Segmented.astro';
+import Readout from '../components/Readout.astro';
 import { tools } from '../data/tools';
+import { SENSORS } from '../tools/dof/logic';
 const t = tools.find((x) => x.slug === 'dof-visualizer')!;
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="Depth of field calculator: near and far focus limits, hyperfocal distance and a to-scale diagram for any sensor, lens and aperture." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Set your sensor, lens, aperture and focus distance. Everything between the near and far limits will look acceptably sharp." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" aria-label="Lens settings">
+      <h2 class="panel-title">Optics</h2>
+      <Select id="sensor" label="Sensor" options={SENSORS.map((s) => ({ value: s.id, label: s.label }))} value="ff" />
+      <div id="crop-field" hidden><NumberField id="crop" label="Crop factor" min={0.3} max={10} step={0.01} value={1.0} unit="×" /></div>
+      <div class="pair">
+        <Slider id="focal" label="Focal length" min={0} max={1000} value={500} display="" />
+        <NumberField id="focal-num" label="mm" min={8} max={600} step={1} value={50} />
+      </div>
+      <div>
+        <Slider id="aperture" label="Aperture" min={0} max={30} value={10} display="f/2.8" />
+        <Segmented id="ap-scale" label="Aperture steps" hideLabel options={[{ value: 'third', label: '⅓ stops' }, { value: 'full', label: 'Full stops' }]} value="third" />
+      </div>
+      <div class="pair">
+        <Slider id="distance" label="Focus distance" min={0} max={1000} value={400} display="" />
+        <NumberField id="distance-num" label="m" min={0.1} max={1000} step={0.01} value={3} />
+      </div>
+      <div>
+        <Segmented id="coc" label="Sharpness standard (circle of confusion)" options={[{ value: 'default', label: 'Standard' }, { value: 'print', label: 'Large print' }, { value: 'custom', label: 'Custom' }]} value="default" />
+        <div id="coc-um-field" hidden style="margin-top:12px"><NumberField id="coc-um" label="Circle of confusion" min={2} max={100} step={1} value={30} unit="µm" /></div>
+        <p class="hint" style="margin-top:8px">Using <span id="coc-value" class="val">30.0 µm</span></p>
+      </div>
+    </section>
+
+    <section class="results" aria-label="Results">
+      <div class="stage diagram-stage">
+        <svg id="diagram" viewBox="0 0 800 210" role="img" aria-label="Depth of field diagram: camera, subject and the zone of acceptable sharpness on a logarithmic distance scale"></svg>
+      </div>
+      <div class="readouts">
+        <Readout id="r-near" label="Near limit" />
+        <Readout id="r-far" label="Far limit" />
+        <Readout id="r-total" label="Total depth" />
+        <Readout id="r-hyper" label="Hyperfocal" tone="text" />
+        <div class="readout-card wide">
+          <div class="k">Front / behind subject (%)</div>
+          <div class="readout" id="r-split" aria-live="polite">—</div>
+          <div class="hint" id="r-split-hint"></div>
+        </div>
+      </div>
+      <p class="hint note">Focus at the hyperfocal distance and everything from half that distance to infinity is acceptably sharp. Distances are measured from the sensor plane.</p>
+    </section>
+  </div>
+  <script>import '../tools/dof/ui';</script>
 </Base>
+
+<style>
+  .pair { display: grid; grid-template-columns: 1fr 6.5rem; gap: 12px; align-items: end; }
+  .results { display: grid; gap: 16px; min-width: 0; }
+  .diagram-stage { min-height: 0; padding: 18px 12px; }
+  #diagram { width: 100%; height: auto; max-height: none; box-shadow: none; }
+  .readouts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .readouts .wide { grid-column: 1 / -1; }
+  .note { max-width: 70ch; }
+  :global(#diagram .axis) { stroke: var(--line); stroke-width: 1.5; }
+  :global(#diagram .tick) { stroke: var(--text-dim); }
+  :global(#diagram .tl) { fill: var(--text-dim); font: 11px var(--font-mono); text-anchor: middle; }
+  :global(#diagram .zone) { fill: rgb(242 181 68 / .16); stroke: var(--amber); stroke-width: 1.5; transition: x .25s var(--ease), width .25s var(--ease); }
+  :global(#diagram .zone-edge) { stroke: var(--amber); stroke-dasharray: 3 3; }
+  :global(#diagram .hyper) { stroke: var(--text-dim); stroke-dasharray: 2 4; }
+  :global(#diagram .hl) { fill: var(--text-dim); font: 11px var(--font-mono); text-anchor: middle; }
+  :global(#diagram .el) { fill: var(--amber); font: 600 12px var(--font-mono); }
+  :global(#diagram .el.end) { text-anchor: end; }
+  :global(#diagram .cam) { fill: var(--surface-2); stroke: var(--text); stroke-width: 1.2; }
+  :global(#diagram .subject) { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; transition: transform .25s var(--ease); }
+  :global(#diagram .subject circle) { fill: var(--accent); }
+</style>
