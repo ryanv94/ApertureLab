@@ -1,9 +1,92 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import NumberField from '../components/NumberField.astro';
+import Readout from '../components/Readout.astro';
 import { tools } from '../data/tools';
 const t = tools.find((x) => x.slug === 'golden-hour')!;
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="Golden hour and blue hour times for any city and date, in local time. Works offline, no account, nothing sent anywhere." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Find out when the light is soft and warm (golden hour) or deep and even (blue hour) for any place and date. Times are shown in that place’s local time." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" aria-label="Location and date">
+      <h2 class="panel-title">Where &amp; when</h2>
+      <button type="button" class="btn btn-block" id="use-location">Use my location</button>
+      <p class="error-box" id="loc-err" role="alert" hidden></p>
+      <div class="field combo">
+        <label class="label" for="city">Search for a city</label>
+        <input type="search" id="city" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="city-list" autocomplete="off" placeholder="e.g. Reykjavík" />
+        <ul id="city-list" role="listbox" aria-label="Matching cities" hidden></ul>
+      </div>
+      <details>
+        <summary>Enter coordinates</summary>
+        <div class="row coords">
+          <NumberField id="lat" label="Latitude" min={-90} max={90} />
+          <NumberField id="lon" label="Longitude" min={-180} max={180} />
+        </div>
+        <button type="button" class="btn btn-block" id="coords-apply">Use coordinates</button>
+      </details>
+      <div class="field"><label class="label" for="date">Date</label><input type="date" id="date" /></div>
+      <p class="hint">City data © <a href="https://www.geonames.org/">GeoNames</a>, CC BY 4.0. Your location is only used on your device.</p>
+    </section>
+
+    <section class="out" aria-label="Light times">
+      <p id="empty" class="stage stage-empty">Choose a location to see today’s light.</p>
+      <div id="results" hidden>
+        <div class="head">
+          <p class="place" id="place"></p>
+          <p class="hint" id="tz-label"></p>
+          <p class="countdown readout" id="countdown" aria-live="polite"></p>
+          <p class="hint" id="polar" hidden></p>
+        </div>
+        <div class="timeline" id="timeline" aria-hidden="true"></div>
+        <div class="legend" aria-hidden="true"><span class="k night">Night</span><span class="k blue">Blue hour</span><span class="k golden">Golden hour</span><span class="k day">Daylight</span></div>
+        <div class="grid">
+          <Readout id="r-blue-am" label="Morning blue hour" tone="text" />
+          <Readout id="r-golden-am" label="Morning golden hour" />
+          <Readout id="r-sunrise" label="Sunrise" tone="text" />
+          <Readout id="r-noon" label="Solar noon" tone="text" />
+          <Readout id="r-sunset" label="Sunset" tone="text" />
+          <Readout id="r-golden-pm" label="Evening golden hour" />
+          <Readout id="r-blue-pm" label="Evening blue hour" tone="text" />
+          <Readout id="r-day" label="Day length" tone="text" />
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/golden-hour/ui';</script>
 </Base>
+<style>
+  .combo { position: relative; }
+  #city-list {
+    position: absolute; z-index: 20; left: 0; right: 0; top: 100%; margin: 4px 0 0; padding: 4px; list-style: none;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); max-height: 300px; overflow: auto;
+    box-shadow: 0 16px 40px rgb(0 0 0 / .5);
+  }
+  #city-list :global(li) { display: grid; padding: 8px 10px; border-radius: 2px; cursor: pointer; font-size: 13px; }
+  #city-list :global(li .muted) { font-size: 11px; }
+  #city-list :global(li[aria-selected='true']), #city-list :global(li:hover) { background: var(--bg); box-shadow: inset 2px 0 var(--accent); }
+  details summary { cursor: pointer; font-size: 13px; color: var(--text-dim); }
+  details[open] summary { margin-bottom: 12px; }
+  .coords { margin-bottom: 10px; }
+  .hint a { color: var(--text); }
+  .out { min-width: 0; }
+  #results { display: grid; gap: 22px; }
+  .place { font: 500 clamp(24px, 3.4vw, 36px)/1.1 var(--font-display); }
+  .countdown { font-size: clamp(22px, 3vw, 30px); margin-top: 12px; }
+  .timeline { position: relative; height: 56px; border-radius: var(--radius); overflow: visible; margin-bottom: 18px; background: #0e0d12; }
+  .timeline :global(.seg) { position: absolute; top: 0; bottom: 0; }
+  .timeline :global(.night) { background: #0E0D12; }
+  .timeline :global(.blue) { background: #2B4C8C; }
+  .timeline :global(.golden) { background: var(--amber); }
+  .timeline :global(.day) { background: #C9B99A; }
+  .timeline :global(.hr) { position: absolute; top: 100%; transform: translateX(-50%); font-size: 10px; color: var(--text-dim); padding-top: 4px; }
+  .timeline :global(.hr:first-of-type) { transform: none; }
+  .timeline :global(.now) { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--accent); }
+  .timeline :global(.now b) { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--accent); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px; color: var(--text-dim); }
+  .legend .k::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); }
+  .legend .night::before { background: #0E0D12; } .legend .blue::before { background: #2B4C8C; } .legend .golden::before { background: var(--amber); } .legend .day::before { background: #C9B99A; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .grid :global(.readout) { font-size: 24px; }
+</style>
