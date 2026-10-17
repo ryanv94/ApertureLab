@@ -1,0 +1,8 @@
+---
+interface Props { id: string }
+const { id } = Astro.props;
+---
+<div class="error-box" id={id} role="alert" hidden>
+  <span class="msg"></span>
+  <button type="button" aria-label="Dismiss" onclick="this.parentElement.hidden = true">✕</button>
+</div>

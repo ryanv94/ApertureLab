@@ -1,0 +1,8 @@
+---
+interface Props { id: string; label: string; value?: string; tone?: 'amber' | 'ok' | 'warn' | 'bad' | 'text' }
+const { id, label, value = '—', tone = 'amber' } = Astro.props;
+---
+<div class="readout-card" data-tone={tone}>
+  <div class="k">{label}</div>
+  <div class="readout" id={id} aria-live="polite">{value}</div>
+</div>

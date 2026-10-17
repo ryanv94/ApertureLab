@@ -1,0 +1,67 @@
+---
+import 'cropperjs/dist/cropper.css';
+import Base from '../layouts/Base.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import Slider from '../components/Slider.astro';
+import Segmented from '../components/Segmented.astro';
+import ErrorBox from '../components/ErrorBox.astro';
+import { tools } from '../data/tools';
+const t = tools.find((x) => x.slug === 'selphy-layout')!;
+---
+<Base title={t.name} description="Lay out two 45×70 mm fridge magnets on a 4×6 inch Canon SELPHY print, with borderless calibration, cropping and cut marks, at 300 DPI." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Put two 45 × 70 mm magnet photos on one 4 × 6 in SELPHY sheet. The SELPHY setting shrinks them slightly so borderless printing doesn’t trim the edges, and cut marks show where to trim." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" id="controls" aria-label="Layout settings">
+      <ErrorBox id="err" />
+      <div>
+        <Segmented id="calib" label="Borderless calibration" options={[{ value: 'selphy', label: 'SELPHY' }, { value: 'none', label: 'Exact 1:1' }, { value: 'custom', label: 'Custom' }]} value="selphy" />
+        <p class="hint" style="margin-top:8px">Scaling: <span id="calib-metric" class="val"></span></p>
+      </div>
+      <div id="custom-calib" class="stack" hidden>
+        <Slider id="w-scale" label="Width scale" min={85} max={105} step={0.1} value={95.7} unit="%" />
+        <Slider id="h-scale" label="Height scale" min={85} max={105} step={0.1} value={97.2} unit="%" />
+      </div>
+
+      {[1, 2].map((n) => (
+        <div class="slot" id={`slot${n}`} data-filled="false">
+          <div class="slot-head">
+            <span class="slot-name">Magnet {n}</span>
+            <span class="hint slot-status" id={`slot${n}-status`}>Empty</span>
+          </div>
+          <div class="slot-drop"><DropZone id={`slot${n}-drop`} label={`Photo for magnet ${n}`} compact /></div>
+          <div class="slot-actions">
+            <button type="button" class="btn" id={`slot${n}-recrop`}>Re-crop</button>
+            <button type="button" class="btn btn-ghost" id={`slot${n}-remove`}>Remove</button>
+          </div>
+        </div>
+      ))}
+      <label class="check"><input type="checkbox" id="same" /> Use magnet 1’s photo for both</label>
+      <label class="check"><input type="checkbox" id="trim" /> Dashed trim outline</label>
+    </section>
+
+    <section class="out" aria-label="Sheet preview">
+      <div class="stage sheet-stage">
+        <canvas id="sheet" aria-label="4 by 6 inch sheet preview with two magnet slots"></canvas>
+      </div>
+      <div class="actions">
+        <p class="hint">6 × 4 in · 1800 × 1200 px · 300 DPI. Print borderless at 100%.</p>
+        <button type="button" class="btn btn-primary" id="download" disabled>Download sheet</button>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/selphy/ui';</script>
+</Base>
+<style>
+  .hint .val { color: var(--amber); }
+  .slot { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); display: grid; gap: 10px; }
+  .slot-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .slot-name { font: 500 18px/1 var(--font-display); }
+  .slot-status { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%; }
+  .slot-actions { display: none; gap: 8px; }
+  .slot[data-filled='true'] .slot-actions { display: flex; }
+  .slot.mirrored .slot-drop, .slot.mirrored .slot-actions { display: none; }
+  .out { display: grid; gap: 14px; min-width: 0; }
+  .sheet-stage canvas { width: 100%; height: auto; max-height: none; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+</style>

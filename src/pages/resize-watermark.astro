@@ -1,0 +1,103 @@
+---
+import 'cropperjs/dist/cropper.css';
+import Base from '../layouts/Base.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import Slider from '../components/Slider.astro';
+import Select from '../components/Select.astro';
+import Segmented from '../components/Segmented.astro';
+import NumberField from '../components/NumberField.astro';
+import ErrorBox from '../components/ErrorBox.astro';
+import { tools } from '../data/tools';
+import { SIZE_PRESETS } from '../tools/resize/logic';
+const t = tools.find((x) => x.slug === 'resize-watermark')!;
+const positions = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'];
+const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr: 'Top right', ml: 'Middle left', mc: 'Centre', mr: 'Middle right', bl: 'Bottom left', bc: 'Bottom centre', br: 'Bottom right' };
+---
+<Base title={t.name} description="Resize photos for Instagram, stories, Full HD or 4K, crop, add a text or logo watermark and export JPEG, PNG or WebP, in batches, in your browser." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Resize one photo or a whole batch to social or screen sizes. Optionally add a text or logo watermark, then export as JPEG, PNG or WebP." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" id="controls" aria-label="Resize settings">
+      <DropZone id="drop" label="Drop photos" multiple />
+      <ErrorBox id="err" />
+      <ul id="thumbs" class="thumbs" aria-label="Loaded photos"></ul>
+
+      <p class="panel-title">Size</p>
+      <Select id="preset" label="Preset" options={SIZE_PRESETS.map((p) => ({ value: p.id, label: p.label }))} value="ig-portrait" />
+      <div id="custom-size" hidden>
+        <div class="row"><NumberField id="cw" label="Width" min={1} step={1} unit="px" /><NumberField id="ch" label="Height" min={1} step={1} unit="px" /></div>
+        <label class="check" style="margin-top:10px"><input type="checkbox" id="lock" checked /> Keep proportions</label>
+      </div>
+      <Segmented id="mode" label="Fitting" options={[{ value: 'fill', label: 'Fill (crop centre)' }, { value: 'fit', label: 'Fit' }, { value: 'crop', label: 'Crop…' }]} value="fill" />
+      <button type="button" class="btn btn-block" id="recrop" hidden>Adjust crop</button>
+
+      <p class="panel-title">Watermark</p>
+      <Segmented id="wm" label="Watermark" hideLabel options={[{ value: 'none', label: 'None' }, { value: 'text', label: 'Text' }, { value: 'image', label: 'Logo' }]} value="none" />
+      <div id="wm-text-opts" class="stack" hidden>
+        <div class="field"><label class="label" for="wm-text">Text</label><input type="text" id="wm-text" placeholder="© 2026 Your Name" /></div>
+        <Segmented id="wm-font" label="Typeface" options={[{ value: 'serif', label: 'Serif' }, { value: 'sans', label: 'Sans' }, { value: 'mono', label: 'Mono' }]} value="sans" />
+        <div class="row">
+          <Slider id="wm-size" label="Size" min={1} max={12} step={0.5} value={3} unit="%" />
+          <div class="field"><label class="label" for="wm-color">Colour</label><input type="color" id="wm-color" value="#ffffff" /></div>
+        </div>
+        <label class="check"><input type="checkbox" id="wm-shadow" checked /> Soft shadow</label>
+      </div>
+      <div id="wm-image-opts" class="stack" hidden>
+        <DropZone id="wm-drop" label="Drop a logo (PNG or SVG)" compact />
+        <p class="hint" id="wm-image-name"></p>
+        <Slider id="wm-scale" label="Logo width" min={5} max={60} value={20} unit="%" />
+      </div>
+      <div id="wm-common" class="stack" hidden>
+        <Slider id="wm-opacity" label="Opacity" min={10} max={100} value={80} unit="%" />
+        <fieldset class="pos-grid">
+          <legend class="label">Position</legend>
+          <div class="grid">
+            {positions.map((p) => <label title={posLabel[p]}><input type="radio" name="pos" value={p} checked={p === 'br'} /><span class="visually-hidden">{posLabel[p]}</span><i></i></label>)}
+          </div>
+        </fieldset>
+        <Slider id="wm-margin" label="Margin" min={0} max={15} step={0.5} value={3} unit="%" />
+      </div>
+
+      <p class="panel-title">Export</p>
+      <Segmented id="format" label="Format" hideLabel options={[{ value: 'jpeg', label: 'JPEG' }, { value: 'png', label: 'PNG' }, { value: 'webp', label: 'WebP' }]} value="jpeg" />
+      <div id="quality-field"><Slider id="quality" label="Quality" min={50} max={100} value={90} unit="%" /></div>
+    </section>
+
+    <section class="out" aria-label="Preview">
+      <div class="stage">
+        <div id="preview-wrap"></div>
+        <p id="empty" class="stage-empty">Your resized photo appears here.</p>
+      </div>
+      <div class="actions">
+        <p class="hint"><span id="out-dims"></span> · about <span id="est" class="val">—</span></p>
+        <div class="btns">
+          <button type="button" class="btn" id="download-all" hidden>Download all (.zip)</button>
+          <button type="button" class="btn btn-primary" id="download" disabled>Download</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/resize/ui';</script>
+</Base>
+<style>
+  .panel-title:not(:first-child) { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .thumbs { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .thumbs:empty { display: none; }
+  .thumbs :global(li) { position: relative; }
+  .thumbs :global(.thumb) { padding: 0; border: 1px solid var(--line); background: var(--bg); cursor: pointer; border-radius: 2px; }
+  .thumbs :global(.thumb canvas) { height: 54px; width: auto; }
+  .thumbs :global(.thumb[aria-pressed='true']) { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .thumbs :global(.rm) { position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface-2); color: var(--text-dim); font-size: 10px; cursor: pointer; }
+  .pos-grid { border: 0; padding: 0; margin: 0; }
+  .pos-grid .grid { display: grid; grid-template-columns: repeat(3, 34px); gap: 4px; padding: 6px; width: max-content; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+  .pos-grid label { position: relative; width: 34px; height: 24px; cursor: pointer; }
+  .pos-grid input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+  .pos-grid i { position: absolute; inset: 7px 10px; border: 1px solid var(--line); border-radius: 1px; transition: background .15s, border-color .15s; }
+  .pos-grid input:checked + span + i { background: var(--accent); border-color: var(--accent); }
+  .pos-grid input:focus-visible + span + i { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .out { display: grid; gap: 14px; min-width: 0; }
+  #preview-wrap { display: contents; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+  .actions .val { color: var(--amber); }
+  .btns { display: flex; gap: 8px; }
+</style>

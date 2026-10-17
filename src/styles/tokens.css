@@ -1,0 +1,22 @@
+:root {
+  --bg: #12100E;
+  --surface: #1C1916;
+  --surface-2: #26221E;
+  --line: #3A342D;
+  --text: #EDE6DA;
+  --text-dim: #A39A8C;
+  --accent: #E5352B;
+  --accent-hi: #FF5A4E;
+  --amber: #F2B544;
+  --ok: #8FBF6A;
+  --warn: #F2B544;
+  --bad: #E5352B;
+
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius: 4px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1280px;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+}
