@@ -55,6 +55,8 @@ test('rejects non-images inline', async ({ page }) => {
 test('crop dialog opens, rotates and applies', async ({ page, errors }) => {
   await page.goto('/resize-watermark.html');
   await page.setInputFiles('#drop input[type=file]', fixture('photo-exif.jpg'));
+  // The thumbnail strip appears once decoded and pushes the controls down; wait so clicks land where intended.
+  await expect(page.locator('#thumbs li')).toHaveCount(1);
   await page.check('input[name="mode"][value="crop"]', { force: true });
   const dialog = page.locator('dialog.crop-dialog');
   await expect(dialog).toBeVisible();

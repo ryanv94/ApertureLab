@@ -4,6 +4,7 @@ import { test, expect, fixture } from './fixtures';
 test('cropping a transparent PNG keeps transparency (exported as white in JPEG)', async ({ page, errors }) => {
   await page.goto('/resize-watermark.html');
   await page.setInputFiles('#drop input[type=file]', fixture('transparent.png'));
+  await expect(page.locator('#thumbs li')).toHaveCount(1);
   await page.selectOption('#preset', 'original');
   await page.check('input[name="format"][value="jpeg"]', { force: true });
   await page.check('input[name="mode"][value="crop"]', { force: true });
@@ -50,6 +51,7 @@ test('size estimate encodes a small trial, not the full image', async ({ page })
 test('SVG logo can be used as a watermark', async ({ page, errors }) => {
   await page.goto('/resize-watermark.html');
   await page.setInputFiles('#drop input[type=file]', fixture('photo-exif.jpg'));
+  await expect(page.locator('#thumbs li')).toHaveCount(1);
   await page.check('input[name="wm"][value="image"]', { force: true });
   await page.setInputFiles('#wm-drop input[type=file]', 'public/icons/icon.svg');
   await expect(page.locator('#wm-image-name')).toHaveText('icon.svg');
