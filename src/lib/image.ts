@@ -7,7 +7,8 @@ export const MAX_AREA = 268_435_456;
 
 export type Validation = { ok: true } | { ok: false; message: string };
 
-export function validateFile(f: File): Validation {
+export function validateFile(f: File, opts: { allowSvg?: boolean } = {}): Validation {
+  if (opts.allowSvg && (f.type === 'image/svg+xml' || /\.svg$/i.test(f.name))) return { ok: true };
   if (f.type === 'image/heic' || f.type === 'image/heif' || HEIC.test(f.name)) {
     return { ok: false, message: `${f.name}: HEIC photos can't be decoded by most browsers (only Safari). Export it as JPEG first.` };
   }
@@ -16,13 +17,54 @@ export function validateFile(f: File): Validation {
   return { ok: false, message: `${f.name} isn't an image file.` };
 }
 
-/** Decodes a file honouring EXIF orientation. */
+/** Decodes a file honouring EXIF orientation. SVGs are rasterised (2048px on the long edge). */
 export async function loadImage(f: File): Promise<ImageBitmap> {
+  if (f.type === 'image/svg+xml' || /\.svg$/i.test(f.name)) return rasteriseSvg(f);
   try {
     return await createImageBitmap(f, { imageOrientation: 'from-image' });
   } catch {
     throw new Error(`Couldn't decode ${f.name}. The file may be damaged or in an unsupported format.`);
   }
+}
+
+async function rasteriseSvg(f: File): Promise<ImageBitmap> {
+  const url = URL.createObjectURL(new Blob([await f.arrayBuffer()], { type: 'image/svg+xml' }));
+  try {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const w0 = img.naturalWidth || 1024, h0 = img.naturalHeight || 1024;
+    const s = 2048 / Math.max(w0, h0);
+    const c = document.createElement('canvas');
+    c.width = Math.round(w0 * s); c.height = Math.round(h0 * s);
+    c.getContext('2d')!.drawImage(img, 0, 0, c.width, c.height);
+    return await createImageBitmap(c);
+  } catch {
+    throw new Error(`Couldn't read ${f.name} as an SVG image.`);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+let probedArea: number | null = null;
+
+/** Largest canvas area this browser can draw. iOS/iPadOS Safari stops at 16.7 MP; others are far higher. */
+export function maxCanvasArea(): number {
+  if (probedArea !== null) return probedArea;
+  probedArea = MAX_AREA;
+  try {
+    const tiny = document.createElement('canvas').getContext('2d');
+    if (!tiny) return probedArea; // no canvas (e.g. test DOM) — assume desktop limits
+    const c = document.createElement('canvas');
+    c.width = 4097; c.height = 4097; // just over 16,777,216 px
+    const ctx = c.getContext('2d');
+    ctx?.fillRect(4096, 4096, 1, 1);
+    if (!ctx || ctx.getImageData(4096, 4096, 1, 1).data[3] === 0) probedArea = 16_777_216;
+    c.width = c.height = 0;
+  } catch {
+    probedArea = 16_777_216;
+  }
+  return probedArea;
 }
 
 export function fitWithin(w: number, h: number, maxEdge: number): { width: number; height: number } {
@@ -31,9 +73,9 @@ export function fitWithin(w: number, h: number, maxEdge: number): { width: numbe
 }
 
 /** Caps a canvas size to browser limits, preserving aspect ratio. */
-export function guardCanvasSize(w: number, h: number): { width: number; height: number; capped: boolean } {
+export function guardCanvasSize(w: number, h: number, maxArea = maxCanvasArea()): { width: number; height: number; capped: boolean } {
   let s = Math.min(1, MAX_EDGE / Math.max(w, h));
-  if (w * s * h * s > MAX_AREA) s = Math.sqrt(MAX_AREA / (w * h));
+  if (w * s * h * s > maxArea) s = Math.sqrt(maxArea / (w * h));
   if (s >= 1) return { width: w, height: h, capped: false };
   return { width: Math.floor(w * s), height: Math.floor(h * s), capped: true };
 }
@@ -48,7 +90,8 @@ export async function exportCanvas(
   if (type === 'image/jpeg') {
     const flat = document.createElement('canvas');
     flat.width = c.width; flat.height = c.height;
-    const ctx = flat.getContext('2d')!;
+    const ctx = flat.getContext('2d');
+    if (!ctx) throw new Error('Export failed — the image is too large for this browser. Try a smaller size.');
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, flat.width, flat.height);
     ctx.drawImage(c, 0, 0);
@@ -56,7 +99,7 @@ export async function exportCanvas(
   }
   if ('convertToBlob' in src) return src.convertToBlob({ type, quality });
   return new Promise((resolve, reject) =>
-    (src as HTMLCanvasElement).toBlob((b) => (b ? resolve(b) : reject(new Error('Export failed — the image may be too large for this browser.'))), type, quality));
+    (src as HTMLCanvasElement).toBlob((b) => (b ? resolve(b) : reject(new Error('Export failed — the image may be too large for this browser. Try a smaller size.'))), type, quality));
 }
 
 /** Writes print density into a JPEG's JFIF APP0 segment (inserting one if absent). */

@@ -33,3 +33,10 @@ describe('watermark', () => {
 
 it('output names', () => expect(outputName('IMG_1.HEIC.jpg', 1080, 1350, 'webp')).toBe('IMG_1.HEIC-1080x1350.webp'));
 it('presets', () => expect(SIZE_PRESETS.map((p) => p.id)).toEqual(['original', 'ig-square', 'ig-portrait', 'ig-story', 'fhd', 'uhd', 'custom']));
+
+it('crop mode centre-crops instead of stretching when the target aspect differs', () => {
+  const p = planResize({ srcW: 4000, srcH: 3000, targetW: 1080, targetH: 1920, mode: 'crop', crop: { x: 0, y: 0, w: 2000, h: 2000 } });
+  expect([p.canvasW, p.canvasH]).toEqual([1080, 1920]);
+  expect(p.src.w / p.src.h).toBeCloseTo(1080 / 1920, 3);
+  expect(p.src).toEqual({ x: 438, y: 0, w: 1125, h: 2000 });
+});

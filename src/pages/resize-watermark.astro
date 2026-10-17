@@ -43,7 +43,7 @@ const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr:
         <label class="check"><input type="checkbox" id="wm-shadow" checked /> Soft shadow</label>
       </div>
       <div id="wm-image-opts" class="stack" hidden>
-        <DropZone id="wm-drop" label="Drop a logo (PNG)" compact />
+        <DropZone id="wm-drop" label="Drop a logo (PNG or SVG)" compact />
         <p class="hint" id="wm-image-name"></p>
         <Slider id="wm-scale" label="Logo width" min={5} max={60} value={20} unit="%" />
       </div>

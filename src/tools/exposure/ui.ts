@@ -120,6 +120,7 @@ function setState(state: string) {
   ($('timer-toggle') as unknown as HTMLButtonElement).disabled = state === 'done';
 }
 function resetTimer() {
+  timer?.reset();
   wake(false);
   const show = seconds >= 1;
   $('timer').hidden = !show;

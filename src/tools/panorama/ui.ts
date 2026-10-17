@@ -96,7 +96,9 @@ function update() {
     const btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'slide-dl'; btn.textContent = '↓';
     btn.setAttribute('aria-label', `Download ${sl.name}`);
-    btn.addEventListener('click', async () => downloadBlob(await blobOf(sl), `${baseName(fileName)}-${sl.name}`));
+    btn.addEventListener('click', async () => {
+      try { downloadBlob(await blobOf(sl), `${baseName(fileName)}-${sl.name}`); } catch (err) { showError('err', (err as Error).message); }
+    });
     cap.append(btn);
     fig.append(canvas, cap);
     strip.append(fig);

@@ -17,7 +17,15 @@ export function planResize({ srcW, srcH, targetW, targetH, mode, crop }: ResizeI
   if (mode === 'crop' && crop) {
     const canvasW = Math.round(targetW);
     const canvasH = Math.round(targetH ?? (canvasW * crop.h) / crop.w);
-    return { canvasW, canvasH, src: { ...crop }, dst: { x: 0, y: 0, w: canvasW, h: canvasH } };
+    // If the target shape changed since cropping, centre-crop inside the crop rather than stretch it.
+    const ta = canvasW / canvasH;
+    let src = { ...crop };
+    if (Math.abs(ta - crop.w / crop.h) > 0.002) {
+      src = crop.w / crop.h > ta
+        ? { x: crop.x + Math.round((crop.w - crop.h * ta) / 2), y: crop.y, w: Math.round(crop.h * ta), h: crop.h }
+        : { x: crop.x, y: crop.y + Math.round((crop.h - crop.w / ta) / 2), w: crop.w, h: Math.round(crop.w / ta) };
+    }
+    return { canvasW, canvasH, src, dst: { x: 0, y: 0, w: canvasW, h: canvasH } };
   }
   if (mode === 'fill' && targetH) {
     const ta = targetW / targetH;

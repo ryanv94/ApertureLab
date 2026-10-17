@@ -86,13 +86,27 @@ async function encode(it: Item): Promise<{ blob: Blob; name: string }> {
   if (p.scale < 1) showError('err', `${it.name} is too large for your browser at that size and was exported at ${Math.round(p.canvasW * p.scale)}px wide.`);
   const canvas = renderOne(bmp, raw, watermark(), p.scale);
   const blob = await exportCanvas(canvas, format(), +$('quality').value / 100, '#FFFFFF');
-  return { blob, name: outputName(it.name, canvas.width, canvas.height, EXT[format()]) };
+  const name = outputName(it.name, canvas.width, canvas.height, EXT[format()]);
+  canvas.width = canvas.height = 0;
+  return { blob, name };
 }
 
+const TRIAL_AREA = 2_000_000;
+
+/** Encodes a ≤2 MP trial and scales its size by area, so tweaking settings never re-encodes a huge image. */
 async function estimate() {
   const it = items[active];
   if (!it) return;
-  try { $('est').textContent = formatBytes((await encode(it)).blob.size); } catch { $('est').textContent = '—'; }
+  try {
+    const { bmp, plan: p } = plan(it);
+    const s = Math.min(1, Math.sqrt(TRIAL_AREA / (p.canvasW * p.canvasH)));
+    const canvas = renderOne(bmp, p, watermark(), s);
+    const blob = await exportCanvas(canvas, format(), +$('quality').value / 100, '#FFFFFF');
+    canvas.width = canvas.height = 0;
+    $('est').textContent = formatBytes(blob.size / (s * s));
+  } catch {
+    $('est').textContent = '—';
+  }
 }
 
 function thumbs() {
@@ -110,7 +124,7 @@ function thumbs() {
     b.addEventListener('click', () => { active = i; thumbs(); render(); });
     const rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'rm'; rm.textContent = '✕'; rm.setAttribute('aria-label', `Remove ${it.name}`);
-    rm.addEventListener('click', () => { it.bitmap.close(); items.splice(i, 1); active = Math.min(active, items.length - 1); thumbs(); if (items.length) render(); else reset(); });
+    rm.addEventListener('click', () => { it.bitmap.close(); it.crop?.close(); items.splice(i, 1); active = Math.min(active, items.length - 1); thumbs(); if (items.length) render(); else reset(); });
     li.append(b, rm);
     ul.append(li);
   });
@@ -128,8 +142,12 @@ function reset() {
 async function ensureCrop(it: Item, force = false) {
   if (it.crop && !force) return;
   const t = target(it);
-  const out = await openCropper(it.bitmap, t.h ? t.w / t.h : null);
-  if (out) { it.crop?.close(); it.crop = out; }
+  try {
+    const out = await openCropper(it.bitmap, t.h ? t.w / t.h : null);
+    if (out) { it.crop?.close(); it.crop = out; }
+  } catch (err) {
+    showError('err', (err as Error).message);
+  }
 }
 
 $('drop').addEventListener('files', async (e) => {
@@ -148,10 +166,15 @@ $('drop').addEventListener('files', async (e) => {
 
 $('wm-drop').addEventListener('files', async (e) => {
   const file = (e as CustomEvent<File[]>).detail[0];
-  const v = validateFile(file);
+  const v = validateFile(file, { allowSvg: true });
   if (!v.ok) return showError('err', v.message);
-  wmImage?.close();
-  wmImage = await loadImage(file);
+  try {
+    const img = await loadImage(file);
+    wmImage?.close();
+    wmImage = img;
+  } catch (err) {
+    return showError('err', (err as Error).message);
+  }
   $('wm-image-name').textContent = file.name;
   render();
 });
@@ -174,8 +197,13 @@ document.querySelectorAll('#controls input:not([name="mode"]), #controls select'
 $('download').addEventListener('click', async () => {
   const it = items[active];
   if (!it) return;
-  const { blob, name } = await encode(it);
-  downloadBlob(blob, name);
+  clearError('err');
+  try {
+    const { blob, name } = await encode(it);
+    downloadBlob(blob, name);
+  } catch (err) {
+    showError('err', (err as Error).message);
+  }
 });
 $('download-all').addEventListener('click', async () => {
   const btn = $('download-all') as unknown as HTMLButtonElement;
@@ -184,6 +212,8 @@ $('download-all').addEventListener('click', async () => {
     const files = [];
     for (const it of items) { const r = await encode(it); files.push({ name: r.name, blob: r.blob }); }
     await downloadZip(files, 'resized.zip');
+  } catch (err) {
+    showError('err', (err as Error).message);
   } finally {
     btn.disabled = false; btn.textContent = 'Download all (.zip)';
   }

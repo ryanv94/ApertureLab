@@ -24,3 +24,23 @@ it('derives remaining time from the clock, survives pause, fires done once', () 
   expect(t.state).toBe('idle');
   expect(t.remainingMs()).toBe(10_000);
 });
+
+it('fires onDone from a timer even if tick() is never called (background tab)', () => {
+  vi.useFakeTimers();
+  try {
+    const t = new BulbTimer(10_000);
+    const done = vi.fn();
+    t.onDone = done;
+    t.start();
+    vi.advanceTimersByTime(4000);
+    t.pause();
+    vi.advanceTimersByTime(20_000);
+    expect(done).not.toHaveBeenCalled();
+    t.start();
+    vi.advanceTimersByTime(6001);
+    expect(done).toHaveBeenCalledTimes(1);
+    expect(t.state).toBe('done');
+  } finally {
+    vi.useRealTimers();
+  }
+});

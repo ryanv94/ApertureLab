@@ -72,7 +72,13 @@ function update() {
 }
 
 async function cropInto(i: 0 | 1, source: ImageBitmap, name: string) {
-  const cropped = await openCropper(source, SLOT_ASPECT, `Crop magnet ${i + 1} · 45 × 70 mm`);
+  let cropped: ImageBitmap | null;
+  try {
+    cropped = await openCropper(source, SLOT_ASPECT, `Crop magnet ${i + 1} · 45 × 70 mm`);
+  } catch (err) {
+    showError('err', (err as Error).message);
+    return;
+  }
   if (!cropped) return;
   const old = slots[i];
   if (old && old.source !== source) old.source.close();
@@ -99,8 +105,12 @@ $('download').addEventListener('click', async () => {
   const out = document.createElement('canvas');
   out.width = SHEET_W; out.height = SHEET_H;
   draw(out, true);
-  const blob = await setJpegDpi(await exportCanvas(out, 'image/jpeg', 0.98), 300);
-  downloadBlob(blob, 'selphy-magnets.jpg');
+  clearError('err');
+  try {
+    downloadBlob(await setJpegDpi(await exportCanvas(out, 'image/jpeg', 0.98), 300), 'selphy-magnets.jpg');
+  } catch (err) {
+    showError('err', (err as Error).message);
+  }
 });
 
 document.fonts.ready.then(update);

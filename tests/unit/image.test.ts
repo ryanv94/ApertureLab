@@ -45,3 +45,17 @@ describe('setJpegDpi', () => {
     expect([out.at(-2), out.at(-1)]).toEqual([0xff, 0xd9]);
   });
 });
+
+describe('browser canvas limits', () => {
+  it('guardCanvasSize honours a smaller (iOS Safari) area limit', () => {
+    const r = guardCanvasSize(8000, 6000, 16_777_216);
+    expect(r.capped).toBe(true);
+    expect(r.width * r.height).toBeLessThanOrEqual(16_777_216);
+    expect(r.width / r.height).toBeCloseTo(8000 / 6000, 2);
+  });
+  it('validateFile accepts SVG only when asked', () => {
+    const svg = new File(['<svg/>'], 'logo.svg', { type: 'image/svg+xml' });
+    expect(validateFile(svg).ok).toBe(false);
+    expect(validateFile(svg, { allowSvg: true }).ok).toBe(true);
+  });
+});

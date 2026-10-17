@@ -53,3 +53,15 @@ it('timeline is contiguous across the local day', () => {
   for (let i = 1; i < segs.length; i++) expect(segs[i].startMin).toBe(segs[i - 1].endMin);
   expect(segs.map((s) => s.phase)).toEqual(expect.arrayContaining(['night', 'blue', 'golden', 'day']));
 });
+
+it('timeline uses wall-clock minutes on a DST changeover day', () => {
+  const tz = 'America/New_York';
+  const d = sunDay('2026-03-08', 40.7128, -74.006, tz);
+  const segs = buildTimeline(d);
+  expect(segs[0].startMin).toBe(0);
+  expect(segs.at(-1)!.endMin).toBe(1440);
+  for (let i = 1; i < segs.length; i++) expect(segs[i].startMin).toBe(segs[i - 1].endMin);
+  const [h, m] = formatInTz(d.goldenPm![0], tz).split(':').map(Number);
+  const evening = segs.filter((s) => s.phase === 'golden').at(-1)!;
+  expect(Math.abs(evening.startMin - (h * 60 + m))).toBeLessThanOrEqual(3);
+});

@@ -7,6 +7,7 @@ export class BulbTimer {
   #state: TimerState = 'idle';
   #elapsed = 0;
   #startedAt = 0;
+  #backstop: ReturnType<typeof setTimeout> | undefined;
 
   constructor(readonly durationMs: number, private now: () => number = () => Date.now()) {}
 
@@ -16,15 +17,19 @@ export class BulbTimer {
     if (this.#state === 'running' || this.#state === 'done') return;
     this.#startedAt = this.now();
     this.#state = 'running';
+    // Animation frames stop in background tabs; this guarantees onDone still fires on time.
+    this.#backstop = setTimeout(() => this.tick(), this.remainingMs() + 1);
   }
 
   pause(): void {
     if (this.#state !== 'running') return;
     this.#elapsed += this.now() - this.#startedAt;
     this.#state = 'paused';
+    clearTimeout(this.#backstop);
   }
 
   reset(): void {
+    clearTimeout(this.#backstop);
     this.#elapsed = 0;
     this.#state = 'idle';
   }
@@ -40,6 +45,7 @@ export class BulbTimer {
     const ms = this.remainingMs();
     this.onTick?.(ms);
     if (ms === 0) {
+      clearTimeout(this.#backstop);
       this.#state = 'done';
       this.onDone?.();
     }

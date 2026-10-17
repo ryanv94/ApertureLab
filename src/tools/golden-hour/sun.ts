@@ -8,7 +8,7 @@ export type Phase = 'night' | 'blue' | 'golden' | 'day';
 export type SunDay = {
   blueAm?: [Date, Date]; goldenAm?: [Date, Date]; sunrise?: Date; noon: Date; sunset?: Date;
   goldenPm?: [Date, Date]; bluePm?: [Date, Date]; dayLengthMin: number; polar: null | 'day' | 'night';
-  lat: number; lon: number; tz: string; midnight: Date;
+  lat: number; lon: number; tz: string; date: string; midnight: Date;
 };
 
 /** Minutes the zone is ahead of UTC at instant `d`. */
@@ -48,7 +48,7 @@ export function sunDay(dateISO: string, lat: number, lon: number, tz: string): S
     goldenPm: pair(t.goldenPmStart, t.bluePmStart),
     bluePm: pair(t.bluePmStart, t.dusk),
     dayLengthMin: sunrise && sunset ? (sunset.getTime() - sunrise.getTime()) / 60000 : polar === 'day' ? 1440 : 0,
-    polar, lat, lon, tz,
+    polar, lat, lon, tz, date: dateISO,
     midnight: zonedTime(dateISO, 0, tz),
   };
 }
@@ -59,16 +59,25 @@ export function formatInTz(d: Date, tz: string): string {
 
 const phaseAt = (deg: number): Phase => (deg < -6 ? 'night' : deg < -4 ? 'blue' : deg < 6 ? 'golden' : 'day');
 
-/** Light phases across the local day (0–1440 min), sampled every 2 minutes from the sun's altitude. */
+/** Light phases across the local day in wall-clock minutes (0–1440), sampled every 2 minutes of real time.
+ *  Sampling runs from local midnight to the next local midnight, so 23- and 25-hour DST days map correctly. */
 export function buildTimeline(day: SunDay): { phase: Phase; startMin: number; endMin: number }[] {
+  const [y, mo, d] = day.date.split('-').map(Number);
+  const next = new Date(Date.UTC(y, mo - 1, d + 1)).toISOString().slice(0, 10);
+  const end = zonedTime(next, 0, day.tz).getTime();
   const segs: { phase: Phase; startMin: number; endMin: number }[] = [];
-  for (let m = 0; m < 1440; m += 2) {
+  let lastWall = -1;
+  for (let t = day.midnight.getTime(); t < end; t += 120_000) {
+    const [h, m] = formatInTz(new Date(t), day.tz).split(':').map(Number);
+    const wall = h * 60 + m;
+    if (wall < lastWall) continue; // repeated hour when clocks go back
+    lastWall = wall;
     // suncalc 2.x reports apparent altitude in degrees
-    const alt = SunCalc.getPosition(new Date(day.midnight.getTime() + m * 60000), day.lat, day.lon).altitude;
-    const phase = phaseAt(alt);
+    const phase = phaseAt(SunCalc.getPosition(new Date(t), day.lat, day.lon).altitude);
     const last = segs.at(-1);
-    if (last?.phase === phase) last.endMin = m + 2;
-    else segs.push({ phase, startMin: m, endMin: m + 2 });
+    if (last?.phase === phase) continue;
+    if (last) last.endMin = wall;
+    segs.push({ phase, startMin: segs.length ? wall : 0, endMin: 1440 });
   }
   return segs;
 }

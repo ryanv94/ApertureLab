@@ -97,6 +97,15 @@ document.querySelectorAll('#controls input, #controls select').forEach((el) => e
 
 $('download').addEventListener('click', async () => {
   if (!bitmap) return;
+  clearError('err');
+  try {
+    await exportFramed(bitmap);
+  } catch (err) {
+    showError('err', (err as Error).message);
+  }
+});
+
+async function exportFramed(bitmap: ImageBitmap) {
   const o = await options();
   const f = computeFrame({ imgW: bitmap.width, imgH: bitmap.height, layout: o.layout, thicknessPct: o.thicknessPct });
   const g = guardCanvasSize(f.canvasW, f.canvasH);
@@ -105,7 +114,8 @@ $('download').addEventListener('click', async () => {
   renderFrame(canvas, bitmap, o, g.width / f.canvasW);
   const png = radio('format') === 'png';
   const blob = await exportCanvas(canvas, png ? 'image/png' : 'image/jpeg', 0.95, o.matte);
+  canvas.width = canvas.height = 0;
   downloadBlob(blob, `${baseName(fileName)}-framed.${png ? 'png' : 'jpg'}`);
-});
+}
 
 syncFill($('thickness'));

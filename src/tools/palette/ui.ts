@@ -131,5 +131,9 @@ $('dl-png').addEventListener('click', async () => {
     ctx.fillStyle = '#EDE6DA'; ctx.font = `500 ${band * 0.12}px "IBM Plex Mono", monospace`;
     ctx.fillText(s.hex.toUpperCase(), pad + i * w, y + band * 0.92);
   });
-  downloadBlob(await exportCanvas(c, 'image/png'), `${baseName(fileName)}-palette.png`);
+  try {
+    downloadBlob(await exportCanvas(c, 'image/png'), `${baseName(fileName)}-palette.png`);
+  } catch (err) {
+    showError('err', (err as Error).message);
+  }
 });
