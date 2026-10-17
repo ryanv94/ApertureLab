@@ -1,9 +1,86 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import Segmented from '../components/Segmented.astro';
+import NumberField from '../components/NumberField.astro';
+import ErrorBox from '../components/ErrorBox.astro';
+import Readout from '../components/Readout.astro';
 import { tools } from '../data/tools';
 const t = tools.find((x) => x.slug === 'print-visualizer')!;
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="Check how large a photo can be printed: effective DPI for every common print size (inches and A-sizes), quality rating and crop preview." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Drop in a photo to see the print resolution it gives at every common size, how much each size crops off, and the largest print it will make cleanly." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" aria-label="Print settings">
+      <DropZone id="drop" label="Drop a photo" />
+      <p class="hint" id="dims"></p>
+      <ErrorBox id="err" />
+      <Segmented id="orient" label="Orientation" options={[{ value: 'auto', label: 'Match photo' }, { value: 'portrait', label: 'Portrait' }, { value: 'landscape', label: 'Landscape' }]} value="auto" />
+      <div>
+        <p class="panel-title">Custom size</p>
+        <div class="custom">
+          <NumberField id="custom-w" label="W" min={0.1} step="any" />
+          <NumberField id="custom-h" label="H" min={0.1} step="any" />
+          <Segmented id="custom-unit" label="Unit" hideLabel options={[{ value: 'mm', label: 'mm' }, { value: 'in', label: 'in' }]} value="mm" />
+        </div>
+        <button type="button" class="btn btn-block" id="custom-add" style="margin-top:10px">Check custom size</button>
+      </div>
+      <div class="row">
+        <div class="readout-card"><div class="k">Max at 300 DPI</div><div class="readout" id="max-300">—</div><div class="hint" id="max-300-cm"></div></div>
+        <div class="readout-card"><div class="k">Max at 150 DPI</div><div class="readout" id="max-150">—</div><div class="hint" id="max-150-cm"></div></div>
+      </div>
+    </section>
+    <section class="out" aria-label="Results">
+      <p id="empty" class="stage stage-empty">Drop a photo to see how large it can print.</p>
+      <div id="results" hidden>
+        <div class="stage">
+          <div class="crop-frame" id="crop-frame">
+            <canvas id="preview"></canvas>
+            <div id="crop-box" tabindex="0" role="slider" aria-label="Crop position — drag or use arrow keys" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <p class="crop-label" id="crop-label"></p>
+        <div class="table-wrap">
+          <table id="sizes">
+            <caption class="visually-hidden">Effective resolution at each print size</caption>
+            <thead><tr><th scope="col">Print size</th><th scope="col" class="num">DPI</th><th scope="col">Quality</th><th scope="col" class="num">Cropped</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="hint">300 DPI is the standard for fine prints viewed up close. Large prints seen from further away look good at 150–200 DPI.</p>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/print/ui';</script>
 </Base>
+<style>
+  .custom { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
+  .row :global(.readout) { font-size: 20px; }
+  .out { min-width: 0; }
+  #results { display: grid; gap: 16px; }
+  .crop-frame { position: relative; overflow: hidden; line-height: 0; }
+  .crop-frame canvas { max-height: 60vh; box-shadow: none; }
+  #crop-box {
+    position: absolute; outline: 2px solid var(--accent); outline-offset: -1px;
+    box-shadow: 0 0 0 9999px rgb(8 7 6 / .68); cursor: grab; touch-action: none;
+    transition: width .2s var(--ease), height .2s var(--ease);
+  }
+  #crop-box[data-axis='x'] { cursor: ew-resize; }
+  #crop-box[data-axis='y'] { cursor: ns-resize; }
+  #crop-box:focus-visible { outline-color: var(--amber); }
+  .crop-label { font: 500 20px/1.2 var(--font-display); }
+  .crop-label[data-tone='ok'] { color: var(--ok); } .crop-label[data-tone='warn'] { color: var(--warn); } .crop-label[data-tone='bad'] { color: var(--bad); }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-weight: 500; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  table :global(td) { padding: 9px 12px; border-bottom: 1px solid #2a2520; white-space: nowrap; }
+  table :global(.num) { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody :global(tr) { cursor: pointer; }
+  tbody :global(tr:hover) { background: var(--surface); }
+  tbody :global(tr[aria-selected='true']) { background: var(--surface-2); box-shadow: inset 3px 0 var(--accent); }
+  tbody :global(.pill) { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; border: 1px solid currentColor; }
+  tbody :global(.pill[data-tone='ok']) { color: var(--ok); }
+  tbody :global(.pill[data-tone='warn']) { color: var(--warn); }
+  tbody :global(.pill[data-tone='bad']) { color: var(--bad); }
+</style>
