@@ -1,1 +1,9 @@
-<html lang="en"><head><meta charset="utf-8" /><title>panorama-splitter</title></head><body><h1>panorama-splitter</h1></body></html>
+---
+import Base from '../layouts/Base.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import { tools } from '../data/tools';
+const t = tools.find((x) => x.slug === 'panorama-splitter')!;
+---
+<Base title={t.name} description={t.blurb} slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+</Base>

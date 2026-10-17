@@ -1,0 +1,24 @@
+---
+interface Props { code?: string }
+const { code = 'APERTURELAB 400' } = Astro.props;
+---
+<div class="film-strip" aria-hidden="true">
+  <span class="sprockets"></span>
+  <span class="codes"><span>{code}</span><span>▸ 24A</span><span>{code}</span><span>▸ 25</span><span>{code}</span><span>▸ 25A</span></span>
+  <span class="sprockets"></span>
+</div>
+<style>
+  .film-strip {
+    display: grid; gap: 4px; padding: 6px 0; margin-block: 28px;
+    border-block: 1px solid var(--line); overflow: hidden; user-select: none;
+  }
+  .sprockets {
+    height: 7px;
+    background: repeating-linear-gradient(90deg, var(--surface-2) 0 10px, transparent 10px 22px);
+    border-radius: 1px;
+  }
+  .codes {
+    display: flex; gap: 48px; white-space: nowrap;
+    font-size: 9px; letter-spacing: .3em; color: rgb(229 53 43 / .55);
+  }
+</style>

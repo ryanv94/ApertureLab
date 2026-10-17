@@ -1,0 +1,37 @@
+---
+import '@fontsource-variable/fraunces/full.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import newRelic from './newrelic.html?raw';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props { title: string; description: string; slug?: string }
+const { title, description, slug } = Astro.props;
+const canonical = new URL(slug ? `${slug}.html` : 'index.html', Astro.site);
+const fullTitle = slug ? `${title} · ApertureLab` : title;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#12100E" />
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+    <Fragment set:html={newRelic} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteNav slug={slug} />
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

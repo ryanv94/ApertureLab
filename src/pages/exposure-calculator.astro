@@ -1,1 +1,9 @@
-<html lang="en"><head><meta charset="utf-8" /><title>exposure-calculator</title></head><body><h1>exposure-calculator</h1></body></html>
+---
+import Base from '../layouts/Base.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import { tools } from '../data/tools';
+const t = tools.find((x) => x.slug === 'exposure-calculator')!;
+---
+<Base title={t.name} description={t.blurb} slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+</Base>

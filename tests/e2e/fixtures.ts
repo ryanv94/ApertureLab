@@ -14,7 +14,8 @@ export const test = base.extend<Fixtures>({
   errors: async ({ page }, use) => {
     const errors: string[] = [];
     await page.route(/(nr-data\.net|newrelic\.com)/, (route) => route.fulfill({ status: 204, body: '' }));
-    page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+    const ours = (t: string) => !/newrelic|nr-data|NREUM/i.test(t);
+    page.on('console', (m) => { if (m.type() === 'error' && ours(m.text() + (m.location().url ?? ''))) errors.push(m.text()); });
     page.on('pageerror', (e) => errors.push(e.message));
     await use(errors);
   },

@@ -1,0 +1,20 @@
+---
+interface Props { size?: number }
+const { size = 28 } = Astro.props;
+// Six-blade iris: hexagonal opening with blade edges running tangentially out to the barrel.
+const r = 11, h = 4.2;
+const pts = Array.from({ length: 6 }, (_, i) => {
+  const a = (Math.PI / 3) * i - Math.PI / 2;
+  return [12 + h * Math.cos(a), 12 + h * Math.sin(a)];
+});
+const blades = pts.map(([x, y], i) => {
+  const a = (Math.PI / 3) * i - Math.PI / 2 + Math.PI / 2.6;
+  return `M${x.toFixed(2)} ${y.toFixed(2)} L${(12 + r * Math.cos(a)).toFixed(2)} ${(12 + r * Math.sin(a)).toFixed(2)}`;
+}).join(' ');
+const hex = pts.map((p) => p.map((n) => n.toFixed(2)).join(',')).join(' ');
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" class="mark">
+  <circle cx="12" cy="12" r={r} stroke="currentColor" stroke-width="1.4" />
+  <path d={blades} stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+  <polygon points={hex} fill="var(--accent)" />
+</svg>
