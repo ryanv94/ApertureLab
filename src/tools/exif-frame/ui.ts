@@ -4,7 +4,8 @@ import { renderFrame, fontsFor, type FrameOptions, type Typeface } from './rende
 import type { FrameLayout } from './layout';
 import { computeFrame } from './layout';
 import { validateFile, loadImage, exportCanvas, guardCanvasSize, fitWithin } from '../../lib/image';
-import { downloadBlob, baseName } from '../../lib/download';
+import { baseName } from '../../lib/download';
+import { saveImages } from '../../lib/save';
 import { showError, clearError } from '../../lib/errors';
 import { syncFill } from '../../lib/slider-fill';
 
@@ -115,7 +116,7 @@ async function exportFramed(bitmap: ImageBitmap) {
   const png = radio('format') === 'png';
   const blob = await exportCanvas(canvas, png ? 'image/png' : 'image/jpeg', 0.95, o.matte);
   canvas.width = canvas.height = 0;
-  downloadBlob(blob, `${baseName(fileName)}-framed.${png ? 'png' : 'jpg'}`);
+  await saveImages([{ blob, name: `${baseName(fileName)}-framed.${png ? 'png' : 'jpg'}` }]);
 }
 
 syncFill($('thickness'));

@@ -53,7 +53,7 @@ docs/superpowers/             original design spec and implementation plan (hist
 
 ## Shared building blocks — use these, don't re-implement
 
-- **Images** (`src/lib/image.ts`): `validateFile(file, { allowSvg? })` → `loadImage(file)` (honours EXIF orientation; rasterises SVG) → draw → `exportCanvas(canvas, type, quality, background)` (JPEG is flattened onto `background`, so transparency never turns black) → `downloadBlob` / `downloadZip` (`src/lib/download.ts`).
+- **Images** (`src/lib/image.ts`): `validateFile(file, { allowSvg? })` → `loadImage(file)` (honours EXIF orientation; rasterises SVG) → draw → `exportCanvas(canvas, type, quality, background)` (JPEG is flattened onto `background`, so transparency never turns black) → `saveImages(files, zipName)` (`src/lib/save.ts`) for any image output: desktop downloads (ZIP when several); touch devices get a sheet of real `<img>`s to press-and-hold into Photos, plus Share and a file fallback (iOS downloads only reach Files). `downloadBlob` (`src/lib/download.ts`) is for non-image files like JSON. Use `touchLabel` to rename "Download all (.zip)" buttons.
 - **Size limits**: always pass output sizes through `guardCanvasSize(w, h)`. It probes the browser (iOS Safari caps at 16.7 MP) and returns `{ width, height, capped }`; warn when capped. Preview with `fitWithin(w, h, maxEdge)`.
 - **Every export / cropper call is wrapped in try/catch → `showError('err', message)`.** Failures must never be silent.
 - **Cropping**: `openCropper(bitmap, aspect | null, title)` returns the cropped, rotated `ImageBitmap` or `null`. Any page using it must `import 'cropperjs/dist/cropper.css'` in its frontmatter.

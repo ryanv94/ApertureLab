@@ -18,7 +18,7 @@ Free photography tools that run entirely in your browser — **[aperturelab.cc](
 | 08 | **Print DPI** | Effective DPI and quality rating at every common inch and ISO A size, crop lost per size, largest print at 300 and 150 DPI, and a draggable crop preview. |
 | 09 | **SELPHY Magnets** | Two 45×70 mm magnet photos on a 6×4 in Canon SELPHY sheet, pre-shrunk for borderless overscan (or exact / custom), with crop, rotate and cut marks. Exports 1800×1200 JPEG tagged at 300 DPI. |
 
-Everything works offline once visited, and the site can be installed as an app.
+Everything works offline once visited, and the site can be installed as an app. On phones, finished images open full size so you can press and hold to save them to Photos / the gallery (or use Share → Save Image).
 
 ## How it's built
 

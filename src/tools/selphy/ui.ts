@@ -1,6 +1,6 @@
 import { SHEET_W, SHEET_H, SLOT_ASPECT, CALIBRATIONS, slotRects, cutMarks, type Rect } from './logic';
 import { validateFile, loadImage, exportCanvas, setJpegDpi } from '../../lib/image';
-import { downloadBlob } from '../../lib/download';
+import { saveImages } from '../../lib/save';
 import { showError, clearError } from '../../lib/errors';
 import { openCropper } from '../../lib/cropper';
 import { syncFill } from '../../lib/slider-fill';
@@ -107,7 +107,7 @@ $('download').addEventListener('click', async () => {
   draw(out, true);
   clearError('err');
   try {
-    downloadBlob(await setJpegDpi(await exportCanvas(out, 'image/jpeg', 0.98), 300), 'selphy-magnets.jpg');
+    await saveImages([{ blob: await setJpegDpi(await exportCanvas(out, 'image/jpeg', 0.98), 300), name: 'selphy-magnets.jpg' }]);
   } catch (err) {
     showError('err', (err as Error).message);
   }
