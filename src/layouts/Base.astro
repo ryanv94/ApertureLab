@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 import '@fontsource/ibm-plex-mono/latin-600.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
+import '../styles/controls.css';
 import newRelic from './newrelic.html?raw';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -33,5 +34,6 @@ const fullTitle = slug ? `${title} · ApertureLab` : title;
       <slot />
     </main>
     <SiteFooter />
+    <script>import '../lib/slider-fill';</script>
   </body>
 </html>

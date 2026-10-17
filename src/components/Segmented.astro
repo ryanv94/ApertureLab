@@ -1,0 +1,12 @@
+---
+interface Props { id: string; label: string; options: { value: string; label: string }[]; value?: string; hideLabel?: boolean }
+const { id, label, options, value = options[0]?.value, hideLabel = false } = Astro.props;
+---
+<fieldset class="segmented" id={id}>
+  <legend class:list={['label', { 'visually-hidden': hideLabel }]}>{label}</legend>
+  <div class="seg-options">
+    {options.map((o) => (
+      <label><input type="radio" name={id} value={o.value} checked={o.value === value} /><span>{o.label}</span></label>
+    ))}
+  </div>
+</fieldset>

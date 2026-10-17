@@ -1,0 +1,54 @@
+---
+interface Props { id: string; label?: string; multiple?: boolean; compact?: boolean }
+const { id, label = 'Drop a photo', multiple = false, compact = false } = Astro.props;
+---
+<div class:list={['dropzone', { compact }]} id={id} data-dropzone>
+  <input type="file" accept="image/*" multiple={multiple} hidden />
+  <button type="button" class="dz-btn">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <rect x="3" y="6" width="22" height="16" rx="1" stroke="currentColor" stroke-width="1.3" />
+      <path d="M3 18l6-5 5 4 4-3 7 5" stroke="currentColor" stroke-width="1.3" />
+      <circle cx="19" cy="11" r="2" fill="var(--accent)" />
+    </svg>
+    <span class="dz-label">{label}</span>
+    <span class="dz-hint">click, drop{multiple ? ' files' : ''} or paste · stays on your device</span>
+  </button>
+</div>
+
+<script>
+  const zones = document.querySelectorAll<HTMLElement>('[data-dropzone]');
+  zones.forEach((zone) => {
+    const input = zone.querySelector('input')!;
+    const emit = (files: File[]) => { if (files.length) zone.dispatchEvent(new CustomEvent('files', { detail: files })); };
+    zone.querySelector('button')!.addEventListener('click', () => input.click());
+    input.addEventListener('change', () => { emit([...(input.files ?? [])]); input.value = ''; });
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('over');
+      const files = [...(e.dataTransfer?.files ?? [])];
+      emit(input.multiple ? files : files.slice(0, 1));
+    });
+  });
+  if (zones.length) {
+    document.addEventListener('paste', (e) => {
+      const target = [...zones].find((z) => z.offsetParent !== null);
+      const files = [...(e.clipboardData?.files ?? [])];
+      if (target && files.length) target.dispatchEvent(new CustomEvent('files', { detail: files }));
+    });
+  }
+</script>
+
+<style>
+  .dz-btn {
+    width: 100%; display: grid; justify-items: center; gap: 6px; padding: 28px 16px; cursor: pointer;
+    background: var(--bg); border: 1px dashed #564d43; border-radius: var(--radius); color: var(--text);
+    transition: border-color .15s, background .15s;
+  }
+  .compact .dz-btn { padding: 14px; }
+  .dz-btn svg { color: var(--text-dim); transition: transform .3s var(--ease); }
+  .dz-label { font: 500 18px/1.2 var(--font-display); }
+  .dz-hint { font-size: 11px; color: var(--text-dim); }
+  .dz-btn:hover, .over .dz-btn { border-color: var(--accent); background: rgb(229 53 43 / .05); }
+  .dz-btn:hover svg, .over .dz-btn svg { transform: translateY(-2px); color: var(--text); }
+</style>
