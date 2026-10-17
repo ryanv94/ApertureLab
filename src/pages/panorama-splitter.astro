@@ -1,9 +1,65 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import Slider from '../components/Slider.astro';
+import Segmented from '../components/Segmented.astro';
+import NumberField from '../components/NumberField.astro';
+import ErrorBox from '../components/ErrorBox.astro';
 import { tools } from '../data/tools';
+import { RATIOS } from '../tools/panorama/logic';
 const t = tools.find((x) => x.slug === 'panorama-splitter')!;
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="Split a panorama into seamless Instagram carousel slides (4:5, 1:1, 1.91:1, 9:16) with an optional overview cover. Runs in your browser." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Cut a wide photo into slides that line up perfectly when swiped. Choose the slide shape and count, and add a cover slide showing the whole view if you want one." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" id="controls" aria-label="Carousel settings">
+      <DropZone id="drop" label="Drop a panorama" />
+      <p class="hint" id="dims"></p>
+      <ErrorBox id="err" />
+      <Segmented id="ratio" label="Slide shape" options={RATIOS.map((r) => ({ value: r.id, label: r.id === 'custom' ? 'Custom' : r.label.split(' ')[0] }))} value="4x5" />
+      <div id="custom-ratio" class="row" hidden>
+        <NumberField id="rw" label="Width" min={0.2} step={0.01} value={3} />
+        <NumberField id="rh" label="Height" min={0.2} step={0.01} value={4} />
+      </div>
+      <div class="field">
+        <label class="label" for="count"><span>Slides</span><span class="muted">2–10</span></label>
+        <div class="stepper">
+          <button type="button" class="btn" id="count-dec" aria-label="Fewer slides">−</button>
+          <input type="number" id="count" min="2" max="10" step="1" value="3" />
+          <button type="button" class="btn" id="count-inc" aria-label="More slides">+</button>
+        </div>
+      </div>
+      <Segmented id="mode" label="When the panorama doesn’t match exactly" options={[{ value: 'crop', label: 'Crop to fill' }, { value: 'fit', label: 'Fit whole width' }]} value="crop" />
+      <div id="offset-field"><Slider id="offset" label="Crop position" min={0} max={100} value={50} unit="%" /></div>
+      <label class="check"><input type="checkbox" id="cover" /> Add an overview cover slide</label>
+      <Segmented id="matte" label="Background (cover and letterbox)" options={[{ value: 'black', label: 'Black' }, { value: 'white', label: 'White' }, { value: 'blur', label: 'Blurred' }]} value="black" />
+      <Segmented id="output" label="Output size" options={[{ value: 'ig', label: 'Instagram (1080 wide)' }, { value: 'native', label: 'Native' }]} value="ig" />
+    </section>
+    <section class="out" aria-label="Preview">
+      <ErrorBox id="warn" />
+      <div class="phone">
+        <div id="slides" class="slides" tabindex="0" aria-label="Carousel preview, scroll sideways"></div>
+        <p id="empty" class="stage-empty">Slides appear here, side by side, as they’ll swipe.</p>
+      </div>
+      <div class="actions"><button type="button" class="btn btn-primary" id="download-zip" disabled>Download all (.zip)</button></div>
+    </section>
+  </div>
+  <script>import '../tools/panorama/ui';</script>
 </Base>
+<style>
+  .stepper { display: grid; grid-template-columns: 42px 1fr 42px; gap: 6px; }
+  .stepper input { text-align: center; }
+  .stepper .btn { padding: 0; }
+  .out { display: grid; gap: 14px; min-width: 0; }
+  .phone { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-height: 420px; display: grid; align-items: center; }
+  .slides { display: flex; gap: 3px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  .slides:empty { display: none; }
+  .slides :global(figure) { margin: 0; flex: none; scroll-snap-align: start; position: relative; }
+  .slides :global(canvas) { height: 340px; width: auto; max-width: none; }
+  .slides :global(figure + figure)::before { content: ''; position: absolute; left: -2px; top: -8px; bottom: 28px; border-left: 1px dashed var(--accent); opacity: .7; }
+  .slides :global(figcaption) { display: flex; gap: 10px; align-items: center; justify-content: space-between; font-size: 11px; padding-top: 8px; }
+  .slides :global(.slide-dl) { width: 26px; height: 26px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); cursor: pointer; }
+  .slides :global(.slide-dl:hover) { border-color: var(--accent); }
+  .actions { display: flex; justify-content: flex-end; }
+</style>
