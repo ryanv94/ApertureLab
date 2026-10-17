@@ -1,9 +1,99 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import Slider from '../components/Slider.astro';
+import NumberField from '../components/NumberField.astro';
+import Readout from '../components/Readout.astro';
 import { tools } from '../data/tools';
 const t = tools.find((x) => x.slug === 'exposure-calculator')!;
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="ND filter and exposure calculator: stack ND filters and a polariser, change aperture or ISO, and time long exposures with a bulb timer." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Meter without filters, then add your ND and CPL. You’ll get the new shutter time, with a countdown timer for Bulb exposures." />
+  <div class="layout develop">
+    <section class="panel" aria-labelledby="h-meter">
+      <h2 class="panel-title" id="h-meter">1 · Metered exposure</h2>
+      <div class="field"><label class="label" for="base-shutter">Shutter</label><select id="base-shutter"></select></div>
+      <div class="row">
+        <div class="field"><label class="label" for="base-aperture">Aperture</label><select id="base-aperture"></select></div>
+        <div class="field"><label class="label" for="base-iso">ISO</label><select id="base-iso"></select></div>
+      </div>
+      <p class="hint">Scene brightness: <span class="val" id="r-ev">—</span> EV<sub>100</sub></p>
+    </section>
+
+    <section class="panel" aria-labelledby="h-filters">
+      <h2 class="panel-title" id="h-filters">2 · Filters</h2>
+      <div class="add">
+        <div class="field"><label class="label" for="nd-add">ND filter</label><select id="nd-add"></select></div>
+        <button type="button" class="btn" id="nd-add-btn">Add</button>
+      </div>
+      <div id="nd-custom-field" hidden><NumberField id="nd-custom" label="Custom ND" min={0.1} max={30} step={0.1} value={6} unit="stops" /></div>
+      <ul id="filters" class="chips" aria-label="Filters on the lens"></ul>
+      <p id="filters-empty" class="hint">No ND filters added.</p>
+      <label class="check"><input type="checkbox" id="cpl-on" /> Circular polariser</label>
+      <Slider id="cpl-stops" label="Polariser light loss" min={0} max={2} step={0.1} value={1.5} display="1.5 st" />
+    </section>
+
+    <section class="panel" aria-labelledby="h-target">
+      <h2 class="panel-title" id="h-target">3 · Shoot at</h2>
+      <div class="row">
+        <div class="field"><label class="label" for="target-aperture">Aperture</label><select id="target-aperture"></select></div>
+        <div class="field"><label class="label" for="target-iso">ISO</label><select id="target-iso"></select></div>
+      </div>
+    </section>
+
+    <section class="result panel" aria-label="Result">
+      <div class="result-main">
+        <p class="k">Shutter speed</p>
+        <p class="readout big" id="r-shutter" aria-live="polite">—</p>
+        <p class="hint"><span id="r-settings"></span> · <span id="r-stops">0</span> stops of filtration</p>
+        <p class="note" id="r-note"></p>
+      </div>
+      <div id="timer" class="timer" data-state="idle" hidden>
+        <svg viewBox="0 0 200 200" class="ring" aria-hidden="true">
+          <circle cx="100" cy="100" r="88" class="track" />
+          <circle cx="100" cy="100" r="88" class="bar" id="timer-ring" />
+          {Array.from({ length: 60 }, (_, i) => <line x1="100" y1="4" x2="100" y2={i % 5 ? 9 : 14} transform={`rotate(${i * 6} 100 100)`} class="tick" />)}
+        </svg>
+        <div class="timer-face">
+          <span class="timer-time readout" id="timer-time" role="timer">0:00</span>
+          <span class="k">Bulb timer</span>
+        </div>
+        <div class="timer-btns">
+          <button type="button" class="btn btn-primary" id="timer-toggle">Start</button>
+          <button type="button" class="btn btn-ghost" id="timer-reset">Reset</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/exposure/ui';</script>
 </Base>
+
+<style>
+  .layout { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 900px) { .layout { grid-template-columns: repeat(3, minmax(0, 1fr)); } .result { grid-column: 1 / -1; } }
+  .add { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+  .chips { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips :global(li) { display: inline-flex; align-items: center; gap: 8px; padding: 6px 6px 6px 10px; font-size: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; }
+  .chips :global(button) { width: 22px; height: 22px; border-radius: 50%; border: 0; background: var(--bg); color: var(--text-dim); cursor: pointer; }
+  .chips :global(button:hover) { color: var(--accent); }
+  .hint .val { color: var(--amber); }
+  .result { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 900px) { .result { grid-template-columns: 1fr auto; padding: 32px; } }
+  .k { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); }
+  .big { font-size: clamp(64px, 13vw, 148px); margin: 10px 0 14px; letter-spacing: -.03em; }
+  .note { margin-top: 6px; font-size: 13px; }
+  .timer { position: relative; display: grid; justify-items: center; gap: 16px; }
+  .ring { width: 220px; height: 220px; transform: rotate(-90deg); }
+  .ring .track { fill: none; stroke: var(--line); stroke-width: 2; }
+  .ring .bar { fill: none; stroke: var(--accent); stroke-width: 4; stroke-dasharray: 552.92; stroke-dashoffset: 0; }
+  .ring .tick { stroke: var(--line); stroke-width: 1; }
+  .timer-face { position: absolute; top: 0; height: 220px; display: grid; place-content: center; text-align: center; gap: 6px; }
+  .timer-time { font-size: 44px; color: var(--text); }
+  [data-state='running'] .timer-time { color: var(--accent); }
+  [data-state='done'] .timer-time { color: var(--ok); }
+  [data-state='done'] .ring .bar { stroke: var(--ok); }
+  .timer-btns { display: flex; gap: 8px; }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-state='running'] .ring { filter: drop-shadow(0 0 10px rgb(229 53 43 / .35)); }
+  }
+</style>
