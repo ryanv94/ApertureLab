@@ -1,0 +1,44 @@
+---
+import type { ToolMeta } from '../data/tools';
+import ToolIcon from './ToolIcon.astro';
+interface Props { tool: ToolMeta }
+const { tool } = Astro.props;
+---
+<a class="tool-frame" href={`${tool.slug}.html`}>
+  <span class="edge">▸ {tool.frame}A</span>
+  <span class="art"><ToolIcon slug={tool.slug} /></span>
+  <span class="num" aria-hidden="true">{tool.frame}</span>
+  <span class="name">{tool.name}</span>
+  <span class="blurb">{tool.blurb}</span>
+  <svg class="grease" viewBox="0 0 200 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M18 70 C 14 22, 80 8, 140 14 C 196 20, 196 110, 150 126 C 100 142, 22 132, 14 84 C 10 58, 40 30, 70 24" />
+  </svg>
+</a>
+<style>
+  .tool-frame {
+    position: relative; display: grid; grid-template-rows: auto 1fr auto auto; gap: 6px;
+    padding: 16px 18px 20px; min-height: 230px; text-decoration: none;
+    background: var(--surface); border: 1px solid #2a2520; border-radius: 2px;
+    transition: background .25s, border-color .25s;
+  }
+  .edge { font-size: 10px; letter-spacing: .2em; color: rgb(229 53 43 / .7); }
+  .art { display: grid; place-items: center; padding: 14px 0; color: var(--text-dim); transition: color .25s, transform .5s var(--ease); }
+  .num {
+    position: absolute; top: 10px; right: 14px; font: 300 44px/1 var(--font-display);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100; color: #2e2924; transition: color .25s;
+  }
+  .name { font: 500 24px/1.1 var(--font-display); letter-spacing: -.01em; }
+  .blurb { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .grease { position: absolute; inset: -10px -14px; width: calc(100% + 28px); height: calc(100% + 20px); pointer-events: none; overflow: visible; }
+  .grease path { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+  .tool-frame:hover, .tool-frame:focus-visible { background: var(--surface-2); border-color: var(--line); outline: none; }
+  .tool-frame:hover .art, .tool-frame:focus-visible .art { color: var(--text); transform: scale(1.06); }
+  .tool-frame:hover .num, .tool-frame:focus-visible .num { color: var(--accent); }
+  .tool-frame:hover .grease path, .tool-frame:focus-visible .grease path { opacity: .9; stroke-dashoffset: 0; }
+  .grease path { transition: stroke-dashoffset .6s var(--ease), opacity .1s; }
+  @media (prefers-reduced-motion: reduce) { .grease path { transition: none; } .art { transition: none; } }
+</style>
+<script>
+  // Normalise the grease-pencil path length so the dash animation draws it fully.
+  document.querySelectorAll<SVGPathElement>('.grease path').forEach((p) => p.setAttribute('pathLength', '1'));
+</script>
