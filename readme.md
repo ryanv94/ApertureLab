@@ -1,82 +1,70 @@
-# 📷 ApertureLab Studio Suite
+# ApertureLab
 
-**ApertureLab** is a minimalist, high-performance, and privacy-focused web application designed for photographers and visual storytellers. Built entirely with client-side technology, it provides core optical tools, exposure calculations, EXIF image framing, client-side resizing, and panoramic carousel splitting without relying on server uploads or third-party tracking.
+Free photography tools that run entirely in your browser — **[aperturelab.cc](https://aperturelab.cc)**
 
----
+> Your photos are processed entirely on your device and are never uploaded. We use anonymous analytics to improve the site.
 
-## ✨ Features & Tools
+## The tools
 
-### 1. 🎯 Depth of Field (DoF) Visualizer
-- **Dynamic Optical Physics Engine**: Calculates near focus limit, far focus limit, total depth of field, and hyperfocal distance.
-- **Interactive SVG Optics Diagram**: Live visual diagram representing camera position, subject placement, focus distribution, and hyperfocal markers.
-- **Sensor & Optic Presets**: Full Frame (35mm), APS-C (Sony/Nikon/Fuji & Canon), Micro Four Thirds (MFT), and Medium Format (Fuji GFX 44x33).
+| # | Tool | What it does |
+|---|------|--------------|
+| 01 | **Depth of Field** | Near/far limits, total depth, hyperfocal distance and front/behind split for full frame, APS-C (1.5× / 1.6×), Micro Four Thirds, 1″, 44×33 medium format or any crop factor. ⅓- or full-stop apertures from f/0.95 to f/32, adjustable circle of confusion, to-scale diagram, shareable URL. |
+| 02 | **Exposure & ND** | Stack any number of ND filters (ND2 – ND1000000 or custom stops) plus a polariser, change aperture/ISO, get the new shutter time (`1/250s` … `2h 19m`). Bulb timer with countdown ring, beeps, vibration and screen wake lock. |
+| 03 | **Resize & Watermark** | Instagram square/portrait/story, Full HD, 4K or custom sizes; fit, fill or hand-drawn crop; text or logo watermark in 9 positions; JPEG / PNG / WebP with quality and live file-size estimate; batch ZIP download. |
+| 04 | **EXIF Frame** | Reads camera, lens and exposure from the photo's EXIF, auto-detects the brand logo (15 brands, bundled locally) and renders a caption bar, Polaroid or even-border matte at full resolution. Every caption field is editable. |
+| 05 | **Panorama Splitter** | Slices a panorama into 2–10 seamless 4:5, 1:1, 1.91:1, 9:16 or custom slides, with crop-or-fit control, an optional overview cover slide (black, white or blurred background) and ZIP export. |
+| 06 | **Colour Palette** | k-means clustering in Lab colour space (3–10 colours, off the main thread), coverage per colour, RGB and luminance histograms; export a PNG strip, CSS variables or JSON. |
+| 07 | **Golden Hour** | Morning and evening golden and blue hour, sunrise, solar noon, sunset and day length for any date, in the location's own time zone. GPS, offline search over ~5,000 cities, or coordinates. Handles polar day and night. |
+| 08 | **Print DPI** | Effective DPI and quality rating at every common inch and ISO A size, crop lost per size, largest print at 300 and 150 DPI, and a draggable crop preview. |
+| 09 | **SELPHY Magnets** | Two 45×70 mm magnet photos on a 6×4 in Canon SELPHY sheet, pre-shrunk for borderless overscan (or exact / custom), with crop, rotate and cut marks. Exports 1800×1200 JPEG tagged at 300 DPI. |
 
-### 2. ⏱️ Exposure Triangle & ND Filter Calculator
-- **Exposure Value (EV) Engine**: Dynamic calculations based on Shutter Speed, Aperture ($f$-stop), and ISO.
-- **Stacked ND Light Loss Compensation**: Compute exposures with stacked Neutral Density filters up to 20 stops (`ND1000000`).
-- **Circular Polarizer (CPL) Adjustment**: Toggle light-loss compensation ($+1.5\text{ stops}$).
-- **Bulb Mode Countdown Timer**: Built-in countdown timer with progress tracking and audio notification on completion.
+Everything works offline once visited, and the site can be installed as an app.
 
-### 3. 📐 Client-Side Resize & Watermark
-- **Browser-Only Processing**: Zero-server upload processing preserving privacy and speed.
-- **Social Media & HD Presets**: Instagram Square, Instagram Portrait, 1080p Full HD, and 4K UHD presets.
-- **Aspect Ratio Lock**: Automated proportional dimension recalculations.
-- **Dynamic Text Overlay**: Custom text watermarks with position (Bottom-Right, Bottom-Left, Center) and color options.
-- **Format & Quality Scaling**: Export to JPEG, PNG, or WebP with adjustable compression quality sliders.
+## How it's built
 
-### 4. 🖼️ Frame Photo with EXIF Telemetry
-- **Automatic EXIF Parsing**: Powered by `ExifReader` to extract camera model, lens specifications, focal length, aperture, shutter speed, and ISO sensitivity.
-- **Brand Logo Preloader**: Renders vector-accurate image logos for **Canon, Sony, Nikon, Fujifilm, Panasonic Lumix, Olympus, OM System, Leica, Pentax, Ricoh, Hasselblad, Apple, Google Pixel, Samsung, and DJI**.
-- **Studio Mattes**: Pure White, Dark Slate, Deep Black, and Gallery Warm Studio White (`#F5F0E6`) with fine sepia border lines.
-- **High-Contrast Typography**: Dual-tone 800/700 Inter & JetBrains Mono typography stack for clean camera telemetry rendering.
+- [Astro](https://astro.build) static site — every page is plain HTML at the same URL as before (`dof-visualizer.html`, …).
+- TypeScript tool logic (`src/tools/<tool>/logic.ts`) kept free of the DOM and unit-tested; `ui.ts` wires it to the page.
+- Hand-written CSS ("Darkroom" design system in `src/styles/`), Fraunces and IBM Plex Mono self-hosted.
+- Libraries bundled at build time, never loaded from a CDN: ExifReader, JSZip, SunCalc, Cropper.js.
+- Workbox service worker generated after each build (`integrations/service-worker.mjs`).
+- Analytics: New Relic browser agent (snippet in `src/layouts/newrelic.html`).
 
-### 5. 🎞️ Carousel Panorama Splitter
-- **Seamless Multi-Slide Crops**: Split ultra-wide panoramic photographs into 2 to 10 carousel slides.
-- **Social Platform Aspect Ratios**:
-  - Instagram Portrait ($4:5$)
-  - Instagram Square ($1:1$)
-  - Instagram Landscape ($1.91:1$)
-  - TikTok Full Vertical ($9:16$)
-  - Custom $W:H$ user ratios
-- **Slide 1 Overview Cover Option**: Generates a cover slide showing the uncropped panorama centered within the target ratio before horizontal crops follow.
-- **JSZip Batch Export**: Download all cropped slides + overview cover directly in a single `.ZIP` archive.
+## Develop
 
----
+Requires Node 22.22+.
 
-## 🔒 Privacy & Architecture
+```bash
+npm install
+npm run dev          # http://localhost:4321
+npm test             # unit tests (Vitest)
+npm run build        # static site in dist/
+npm run test:e2e     # browser tests (Playwright) against the built site
+```
 
-- **100% Client-Side Execution**: All image manipulation, canvas operations, metadata parsing, and archive generations occur entirely within your Web Browser's HTML5 Engine.
-- **Zero Third-Party Image Uploads**: Photos are processed directly via browser memory (`HTMLCanvasElement` & Blob APIs).
+First-time Playwright setup: `npx playwright install chromium`.
 
----
+### Regenerating bundled data
 
-## 🚀 Getting Started
+These run at development time only; their outputs are committed.
 
-Since **ApertureLab** is built as a single-file web application, deployment and usage are instantaneous:
+| Command | Produces |
+|---------|----------|
+| `npm run fixtures` | Test images in `tests/fixtures/` |
+| `node scripts/fetch-logos.mjs` | Brand logos in `public/logos/` (from Wikimedia Commons) |
+| `node scripts/build-cities.mjs` | `public/data/cities.json` (from GeoNames) |
+| `node scripts/make-icons.mjs` | App icons in `public/icons/` from `icon.svg` |
 
-### Local Usage
-1. Clone or download the repository:
-   ```bash
-   git clone https://github.com/your-username/aperturelab.git
-   ```
-2. Open `index.html` directly in any modern browser (Chrome, Edge, Safari, Firefox).
+## Deploy
 
-### Single-File Deployment
-Simply upload `index.html` to any web server, GitHub Pages, Netlify, Cloudflare Pages, or Vercel. No node server or backend build tools required.
+Pushing to `main` runs `.github/workflows/deploy.yml`: unit tests → build → browser tests → publish to GitHub Pages. Pull requests run the same checks without deploying.
 
----
+**One-time setup:** in the repository go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**. The custom domain is kept by `public/CNAME`.
 
-## 🛠️ Built With
+## Credits
 
-- **Framework**: Native HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: [Tailwind CSS CDN](https://tailwindcss.com/)
-- **Icons**: [Font Awesome 6](https://fontawesome.com/)
-- **Typography**: Inter & JetBrains Mono via Google Fonts
-- **Metadata Parsing**: [ExifReader](https://github.com/mattiasw/ExifReader)
-- **Batch Archiving**: [JSZip](https://stuk.github.io/jszip/)
+- City data © [GeoNames](https://www.geonames.org/), CC BY 4.0.
+- Camera brand logos from Wikimedia Commons; trademarks belong to their owners.
 
----
+## Licence
 
-## 📄 License
-
-This project is licensed under the **MIT License**. Free for personal and commercial use by photographers and developers alike.
+MIT.
