@@ -1,0 +1,33 @@
+{
+  "name": "aperturelab",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "fixtures": "node scripts/make-fixtures.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "astro": "^7.4.0",
+    "cropperjs": "^1.7.0",
+    "exifreader": "^4.50.0",
+    "jszip": "^3.10.2",
+    "suncalc": "^2.1.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/suncalc": "^1.9.2",
+    "happy-dom": "^21.0.3",
+    "piexifjs": "^1.0.6",
+    "sharp": "^0.35.5",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}
