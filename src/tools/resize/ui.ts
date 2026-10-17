@@ -1,7 +1,7 @@
 import { SIZE_PRESETS, planResize, outputName, type Position } from './logic';
 import { renderOne, wmFont, type Watermark } from './render';
 import { validateFile, loadImage, exportCanvas, guardCanvasSize, fitWithin, type ExportType } from '../../lib/image';
-import { downloadBlob, downloadZip } from '../../lib/download';
+import { saveImages, touchLabel } from '../../lib/save';
 import { formatBytes } from '../../lib/format';
 import { showError, clearError } from '../../lib/errors';
 import { openCropper } from '../../lib/cropper';
@@ -200,22 +200,24 @@ $('download').addEventListener('click', async () => {
   clearError('err');
   try {
     const { blob, name } = await encode(it);
-    downloadBlob(blob, name);
+    await saveImages([{ blob, name }]);
   } catch (err) {
     showError('err', (err as Error).message);
   }
 });
 $('download-all').addEventListener('click', async () => {
   const btn = $('download-all') as unknown as HTMLButtonElement;
+  const label = btn.textContent;
   btn.disabled = true; btn.textContent = 'Preparing…';
   try {
     const files = [];
     for (const it of items) { const r = await encode(it); files.push({ name: r.name, blob: r.blob }); }
-    await downloadZip(files, 'resized.zip');
+    await saveImages(files, 'resized.zip');
   } catch (err) {
     showError('err', (err as Error).message);
   } finally {
-    btn.disabled = false; btn.textContent = 'Download all (.zip)';
+    btn.disabled = false; btn.textContent = label;
   }
 });
+touchLabel($('download-all'), 'Save all');
 render();

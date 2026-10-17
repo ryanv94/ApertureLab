@@ -1,6 +1,7 @@
 import { RATIOS, planSlices, planCover, outputScale, type Rect } from './logic';
 import { validateFile, loadImage, exportCanvas, guardCanvasSize } from '../../lib/image';
-import { downloadBlob, downloadZip, baseName } from '../../lib/download';
+import { baseName } from '../../lib/download';
+import { saveImages, touchLabel } from '../../lib/save';
 import { showError, clearError } from '../../lib/errors';
 
 const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
@@ -97,7 +98,7 @@ function update() {
     btn.type = 'button'; btn.className = 'slide-dl'; btn.textContent = '↓';
     btn.setAttribute('aria-label', `Download ${sl.name}`);
     btn.addEventListener('click', async () => {
-      try { downloadBlob(await blobOf(sl), `${baseName(fileName)}-${sl.name}`); } catch (err) { showError('err', (err as Error).message); }
+      try { await saveImages([{ blob: await blobOf(sl), name: `${baseName(fileName)}-${sl.name}` }]); } catch (err) { showError('err', (err as Error).message); }
     });
     cap.append(btn);
     fig.append(canvas, cap);
@@ -133,15 +134,17 @@ $('offset').addEventListener('input', update);
 
 $('download-zip').addEventListener('click', async () => {
   const btn = $('download-zip') as unknown as HTMLButtonElement;
+  const label = btn.textContent;
   btn.disabled = true; btn.textContent = 'Preparing…';
   try {
     const files = [];
     for (const sl of slides()) files.push({ name: sl.name, blob: await blobOf(sl) });
-    await downloadZip(files, `${baseName(fileName)}-carousel.zip`);
+    await saveImages(files, `${baseName(fileName)}-carousel.zip`);
   } catch (err) {
     showError('err', (err as Error).message);
   } finally {
-    btn.disabled = false; btn.textContent = 'Download all (.zip)';
+    btn.disabled = false; btn.textContent = label;
   }
 });
+touchLabel($('download-zip'), 'Save all');
 update();

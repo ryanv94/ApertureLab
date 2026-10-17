@@ -3,6 +3,7 @@ import { computeHistograms, type Histograms } from './histogram';
 import { paletteCss, paletteJson } from './export';
 import { validateFile, loadImage, fitWithin, exportCanvas } from '../../lib/image';
 import { downloadBlob, baseName } from '../../lib/download';
+import { saveImages } from '../../lib/save';
 import { showError, clearError } from '../../lib/errors';
 import { toast } from '../../lib/toast';
 
@@ -132,7 +133,7 @@ $('dl-png').addEventListener('click', async () => {
     ctx.fillText(s.hex.toUpperCase(), pad + i * w, y + band * 0.92);
   });
   try {
-    downloadBlob(await exportCanvas(c, 'image/png'), `${baseName(fileName)}-palette.png`);
+    await saveImages([{ blob: await exportCanvas(c, 'image/png'), name: `${baseName(fileName)}-palette.png` }]);
   } catch (err) {
     showError('err', (err as Error).message);
   }
