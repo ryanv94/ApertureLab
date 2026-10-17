@@ -25,6 +25,8 @@ const fullTitle = slug ? `${title} · ApertureLab` : title;
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#12100E" />
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <Fragment set:html={newRelic} />
   </head>
   <body>
@@ -34,6 +36,6 @@ const fullTitle = slug ? `${title} · ApertureLab` : title;
       <slot />
     </main>
     <SiteFooter />
-    <script>import '../lib/slider-fill';</script>
+    <script>import '../lib/slider-fill'; import '../lib/pwa';</script>
   </body>
 </html>
