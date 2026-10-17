@@ -1,9 +1,60 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import Slider from '../components/Slider.astro';
+import Select from '../components/Select.astro';
+import Segmented from '../components/Segmented.astro';
+import ErrorBox from '../components/ErrorBox.astro';
 import { tools } from '../data/tools';
+import { BRANDS } from '../tools/exif-frame/brands';
 const t = tools.find((x) => x.slug === 'exif-frame')!;
+const text = (id: string, label: string, ph = '') => ({ id, label, ph });
 ---
-<Base title={t.name} description={t.blurb} slug={t.slug}>
-  <ToolHeader frame={t.frame} name={t.name} lede={t.blurb} />
+<Base title={t.name} description="Add a gallery matte to your photo, captioned with camera, lens and exposure settings read from its EXIF data. Runs in your browser." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Drop in a photo and its camera, lens and settings are read from the file. Choose a matte and layout, edit any caption text, and export at full resolution." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" id="controls" aria-label="Frame settings">
+      <DropZone id="drop" label="Drop a photo" />
+      <ErrorBox id="err" />
+      <Segmented id="layout" label="Layout" options={[{ value: 'bar', label: 'Caption bar' }, { value: 'polaroid', label: 'Polaroid' }, { value: 'even', label: 'Even border' }]} value="bar" />
+      <div class="row">
+        <Select id="matte" label="Matte" options={[{ value: '#FFFFFF', label: 'Pure white' }, { value: '#F5F0E6', label: 'Warm white' }, { value: '#2B2F36', label: 'Slate' }, { value: '#0B0B0B', label: 'Black' }]} value="#FFFFFF" />
+        <Select id="brand" label="Logo" options={[{ value: 'auto', label: 'Auto-detect' }, ...BRANDS.map((b) => ({ value: b.id, label: b.label })), { value: 'none', label: 'No logo' }]} value="auto" />
+      </div>
+      <p class="hint" id="brand-auto">Drop a photo to detect the brand</p>
+      <Slider id="thickness" label="Border" min={0} max={25} value={5} unit="%" />
+      <label class="check"><input type="checkbox" id="keyline" /> Fine keyline around the photo</label>
+      <Segmented id="type" label="Typography" options={[{ value: 'modern', label: 'Modern' }, { value: 'fineart', label: 'Fine art' }, { value: 'technical', label: 'Technical' }]} value="modern" />
+      <div id="fields" class="fields" hidden>
+        <p class="panel-title">Caption (from EXIF — editable)</p>
+        <div class="field"><label class="label" for="f-model">Camera</label><input type="text" id="f-model" /></div>
+        <div class="field"><label class="label" for="f-lens">Lens</label><input type="text" id="f-lens" /></div>
+        <div class="grid4">
+          <div class="field"><label class="label" for="f-focal">mm</label><input type="text" id="f-focal" inputmode="decimal" /></div>
+          <div class="field"><label class="label" for="f-aperture">f/</label><input type="text" id="f-aperture" inputmode="decimal" /></div>
+          <div class="field"><label class="label" for="f-shutter">Shutter</label><input type="text" id="f-shutter" /></div>
+          <div class="field"><label class="label" for="f-iso">ISO</label><input type="text" id="f-iso" inputmode="numeric" /></div>
+        </div>
+        <div class="field"><label class="label" for="f-date">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD" /></div>
+      </div>
+    </section>
+    <section class="out" aria-label="Preview">
+      <div class="stage">
+        <canvas id="preview" hidden></canvas>
+        <p id="empty" class="stage-empty">Your framed photo appears here.</p>
+      </div>
+      <div class="actions">
+        <Segmented id="format" label="Format" hideLabel options={[{ value: 'jpg', label: 'JPEG' }, { value: 'png', label: 'PNG' }]} value="jpg" />
+        <button type="button" class="btn btn-primary" id="download" disabled>Download full resolution</button>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/exif-frame/ui';</script>
 </Base>
+<style>
+  .fields { display: grid; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .out { display: grid; gap: 14px; min-width: 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; align-items: center; }
+</style>
