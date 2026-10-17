@@ -189,10 +189,10 @@ All text/background pairs verified ≥ 4.5:1 (body) / 3:1 (large, UI borders).
 
 ### 5.9 SELPHY Magnet Layout — `selphy-layout.html`
 
-- Preserve current behaviour and constants: two 45×70mm slots on a 4×6in (1200×1800px @300 DPI) sheet; calibration modes "SELPHY calibrated" (current pre-shrink values, 47×72 → 45×70; W 95.7%, H 97.2%), "Exact 1:1", "Custom" (W/H scale sliders). Exact constants copied from existing `selphy-layout.html` during implementation.
+- Preserve current behaviour and constants: two 45×70mm slots on a 6×4in landscape sheet (1800×1200px @300 DPI; base slot 531×827px, centred at x=600 and x=1200); calibration modes "SELPHY calibrated" (current pre-shrink values, 47×72 → 45×70; W 95.7%, H 97.2%), "Exact 1:1", "Custom" (W/H scale sliders). Exact constants copied from existing `selphy-layout.html` during implementation.
 - Per slot: upload, crop (Cropper.js, locked 45:70 ratio, rotate ±90°), replace, remove. "Use same image for both" toggle.
 - Cut guides: corner crop marks + optional dashed trim outline.
-- Export: 1200×1800 JPEG (q 0.98) at 300 DPI (DPI written to JPEG JFIF header so print dialogs size it correctly).
+- Export: 1800×1200 JPEG (q 0.98) at 300 DPI (DPI written to JPEG JFIF header so print dialogs size it correctly).
 
 ### 5.10 Home — `index.html`
 
