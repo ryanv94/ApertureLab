@@ -34,7 +34,7 @@ npm run preview      # serve dist/ (Astro 7: add `--ignore-lock` if a stale lock
 src/
   layouts/Base.astro          <head> (fonts, manifest, New Relic), nav, footer, global scripts
   layouts/newrelic.html       New Relic snippet, verbatim
-  data/tools.ts               ToolMeta list (slug, frame "01".."09", name, short nav label, blurb) + PRIVACY
+  data/tools.ts               ToolMeta list (slug, frame "01".."10", name, short nav label, blurb) + PRIVACY
   components/                 SiteNav, SiteFooter, ToolHeader, ToolFrame, ToolIcon, FilmStrip, ApertureMark,
                               DropZone, Slider, NumberField, Select, Segmented, Readout, Button, ErrorBox, Modal
   pages/<slug>.astro          one page per tool + index.astro (contact sheet)
@@ -64,7 +64,7 @@ docs/superpowers/             original design spec and implementation plan (hist
 
 ## Adding a new tool — checklist
 
-1. Add a `ToolMeta` entry to `src/data/tools.ts` (next frame number; update "Frame NN / 09" wording in `ToolHeader.astro` if the count changes). Nav, the mobile menu and the home contact sheet read from this list.
+1. Add a `ToolMeta` entry to `src/data/tools.ts` (next frame number; `ToolHeader.astro` derives the total from the list; update the home kicker "Ten tools" wording and the hardcoded counts in `home.spec.ts` / `layout.spec.ts`). Nav, the mobile menu and the home contact sheet read from this list.
 2. Add an illustration case for the slug in `src/components/ToolIcon.astro` (64×40 line art, `currentColor` plus accent).
 3. `src/tools/<tool>/logic.ts` — pure functions. **Write the Vitest tests first** with real reference values (`tests/unit/<tool>.test.ts`).
 4. `src/pages/<slug>.astro` — `Base` + `ToolHeader` + `.panel-grid` (controls `.panel.sticky` on the left, `.stage` preview on the right), built from the shared components. Give controls stable `id`s; tests target them.

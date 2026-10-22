@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolHeader from '../components/ToolHeader.astro';
+import DropZone from '../components/DropZone.astro';
+import ErrorBox from '../components/ErrorBox.astro';
+import NumberField from '../components/NumberField.astro';
+import Select from '../components/Select.astro';
+import Segmented from '../components/Segmented.astro';
+import Slider from '../components/Slider.astro';
+import { tools } from '../data/tools';
+import { PRESETS } from '../tools/collage/logic';
+const t = tools.find((x) => x.slug === 'collage')!;
+const groups = ['ISO', 'Inch', 'Metric'] as const;
+const groupLabel = { ISO: 'ISO A-series', Inch: 'Inch standards', Metric: 'Metric standards' };
+---
+<Base title={t.name} description="Arrange 6 to 10 photos into a balanced, print-ready collage on any paper size, then export PNG, JPEG or PDF at up to 600 DPI, in your browser." slug={t.slug}>
+  <ToolHeader frame={t.frame} name={t.name} lede="Drop in 6 to 10 photos and get a balanced composition for any print size. Drag photos to swap them, star one as the hero, then export at print resolution." />
+  <div class="panel-grid develop">
+    <section class="panel sticky" id="controls" aria-label="Collage settings">
+      <DropZone id="drop" label="Drop 6–10 photos" multiple />
+      <ErrorBox id="err" />
+      <p class="hint" id="count-hint">0 of 6–10 photos</p>
+
+      <p class="panel-title">Canvas</p>
+      <Segmented id="unit" label="Units" value="mm" options={[{ value: 'mm', label: 'mm' }, { value: 'in', label: 'inches' }]} />
+      <div class="field">
+        <label class="label" for="preset"><span>Preset</span></label>
+        <select id="preset">
+          {groups.map((g) => (
+            <optgroup label={groupLabel[g]}>
+              {PRESETS.filter((p) => p.group === g).map((p) => <option value={p.id}>{p.label}</option>)}
+            </optgroup>
+          ))}
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="row">
+        <NumberField id="w" label="Width" value={210} min={1} />
+        <NumberField id="h" label="Height" value={297} min={1} />
+      </div>
+      <button type="button" class="btn btn-block" id="flip" aria-label="Swap width and height">⇄ Flip</button>
+
+      <p class="panel-title">Print</p>
+      <div class="row">
+        <Select id="dpi-preset" label="Resolution" value="300" options={[
+          { value: '150', label: '150 · draft' }, { value: '240', label: '240 · good' },
+          { value: '300', label: '300 · photo' }, { value: '600', label: '600 · fine' }, { value: 'custom', label: 'Custom' },
+        ]} />
+        <NumberField id="dpi" label="DPI" value={300} min={36} max={1200} step={1} />
+      </div>
+      <p class="hint">Output: <b class="val" id="readout">—</b></p>
+      <p class="hint notice" id="notice" role="status" hidden></p>
+
+      <p class="panel-title">Style</p>
+      <Slider id="margin" label="Margin" min={0} max={50} step={1} value={10} unit=" mm" />
+      <Slider id="gap" label="Gap" min={0} max={30} step={0.5} value={4} unit=" mm" />
+      <Segmented id="bg" label="Background" value="#0B0A09" options={[
+        { value: '#0B0A09', label: 'Black' }, { value: '#F5F1EA', label: 'White' }, { value: '#8A8176', label: 'Warm grey' },
+      ]} />
+    </section>
+
+    <section class="out" aria-label="Preview">
+      <div class="stage" id="stage-wrap">
+        <p class="stage-empty" id="stage-empty">Your collage appears here.</p>
+        <canvas id="stage" aria-label="Collage preview" hidden></canvas>
+      </div>
+      <div class="actions">
+        <p class="hint">Drag a photo onto another to swap them. Star one as hero to give it centre stage.</p>
+        <button type="button" class="btn" id="shuffle" disabled>↻ Shuffle</button>
+      </div>
+      <ul id="thumbs" class="thumbs" aria-label="Photos"></ul>
+      <div class="actions">
+        <p class="hint" id="export-status" role="status"></p>
+        <div class="btns">
+          <button type="button" class="btn btn-primary" id="export-png" disabled>PNG</button>
+          <button type="button" class="btn btn-primary" id="export-jpg" disabled>JPEG</button>
+          <button type="button" class="btn btn-primary" id="export-pdf" disabled>PDF</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>import '../tools/collage/ui';</script>
+</Base>
+<style>
+  .panel-title:not(:first-of-type) { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .out { display: grid; gap: 14px; min-width: 0; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+  .btns { display: flex; gap: 8px; }
+  .val { color: var(--amber); font-weight: 600; }
+  .notice { color: var(--amber); }
+  #stage { touch-action: none; cursor: grab; }
+  #stage:global(.dragging) { cursor: grabbing; }
+  .thumbs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+  .thumbs:empty { display: none; }
+  .thumbs :global(li) { background: var(--bg); border: 1px solid var(--line); border-radius: 3px; padding: 6px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .thumbs :global(li.is-hero) { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber); }
+  .thumbs :global(canvas) { width: 100%; height: 72px; object-fit: contain; background: #000; box-shadow: none; }
+  .thumbs :global(.thumb-name) { font-size: 11px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .thumbs :global(.thumb-actions) { display: flex; gap: 6px; }
+  .thumbs :global(.thumb-actions .btn) { padding: 5px 8px; font-size: 11px; white-space: nowrap; }
+  .thumbs :global(.thumb-actions .btn:first-child) { flex: 1; }
+  .thumbs :global(.thumb-actions .btn[aria-pressed='true']) { background: var(--amber); border-color: var(--amber); color: #12100e; }
+</style>
