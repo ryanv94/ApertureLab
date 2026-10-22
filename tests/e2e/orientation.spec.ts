@@ -12,8 +12,10 @@ test('Print DPI reads the upright dimensions', async ({ page }) => {
 test('Resize exports upright with the red band on the right', async ({ page }) => {
   await page.goto('/resize-watermark.html');
   await page.setInputFiles('#drop input[type=file]', PORTRAIT);
+  await expect(page.locator('#thumbs li')).toHaveCount(1); // thumbnail strip shifts the controls; wait for it
   await page.selectOption('#preset', 'original');
   await page.check('input[name="format"][value="png"]', { force: true });
+  await expect(page.locator('input[name="format"][value="png"]')).toBeChecked();
   const dl = page.waitForEvent('download');
   await page.click('#download');
   const { data, info } = await sharp(await (await dl).path()).raw().toBuffer({ resolveWithObject: true });
