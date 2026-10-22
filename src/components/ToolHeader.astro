@@ -1,9 +1,10 @@
 ---
+import { tools } from '../data/tools';
 interface Props { frame: string; name: string; lede: string }
 const { frame, name, lede } = Astro.props;
 ---
 <div class="tool-header develop">
-  <p class="edge"><span>▸ {frame}A</span><span class="dash"></span><span>Frame {frame} / 09</span></p>
+  <p class="edge"><span>▸ {frame}A</span><span class="dash"></span><span>Frame {frame} / {String(tools.length).padStart(2, '0')}</span></p>
   <h1>{name}</h1>
   <p class="lede">{lede}</p>
 </div>

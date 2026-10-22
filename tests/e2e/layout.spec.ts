@@ -29,7 +29,7 @@ test('mobile menu opens, lists tools, closes on Esc', async ({ page }) => {
   await btn.click();
   const menu = page.locator('#site-menu');
   await expect(menu).toBeVisible();
-  await expect(menu.locator('a[href$=".html"]:not([href="index.html"])')).toHaveCount(9);
+  await expect(menu.locator('a[href$=".html"]:not([href="index.html"])')).toHaveCount(10);
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
   await expect(btn).toBeFocused();

@@ -10,6 +10,7 @@ export const tools: ToolMeta[] = [
   { slug: 'golden-hour', frame: '07', name: 'Golden Hour', short: 'Light', blurb: 'Golden and blue hour for any place and date, offline.' },
   { slug: 'print-visualizer', frame: '08', name: 'Print DPI', short: 'Print', blurb: 'How big can it print? Every size, rated and cropped.' },
   { slug: 'selphy-layout', frame: '09', name: 'SELPHY Magnets', short: 'SELPHY', blurb: 'Two 45×70 mm magnets on one 4×6 sheet, calibrated with cut marks.' },
+  { slug: 'collage', frame: '10', name: 'Collage', short: 'Collage', blurb: 'Arrange 6–10 photos into a balanced, print-ready composition.' },
 ];
 
 export const PRIVACY =

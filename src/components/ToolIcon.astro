@@ -41,4 +41,10 @@ const { slug } = Astro.props;
     <rect x="4" y="4" width="56" height="32" /><rect x="14" y="8" width="14" height="24" fill="currentColor" fill-opacity=".18" /><rect x="36" y="8" width="14" height="24" fill="currentColor" fill-opacity=".18" />
     <path d="M10 8h2M14 4v2M30 32h2M28 36v-2M32 8h2M36 4v2M54 32h-2M50 36v-2" stroke="var(--accent)" />
   </>}
+  {slug === 'collage' && <>
+    <rect x="4" y="4" width="56" height="32" />
+    <rect x="8" y="8" width="24" height="24" fill="currentColor" fill-opacity=".18" />
+    <rect x="36" y="8" width="20" height="11" fill="currentColor" fill-opacity=".18" />
+    <rect x="36" y="23" width="9" height="9" fill="currentColor" fill-opacity=".18" /><rect x="48" y="23" width="8" height="9" stroke="var(--accent)" />
+  </>}
 </svg>

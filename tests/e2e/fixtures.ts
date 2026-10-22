@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test';
 
 export const PAGES = [
   'index', 'dof-visualizer', 'exposure-calculator', 'resize-watermark', 'exif-frame',
-  'panorama-splitter', 'color-palette', 'golden-hour', 'print-visualizer', 'selphy-layout',
+  'panorama-splitter', 'color-palette', 'golden-hour', 'print-visualizer', 'selphy-layout', 'collage',
 ] as const;
 
 export const fixture = (name: string) => `tests/fixtures/${name}`;
