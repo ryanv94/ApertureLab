@@ -6,7 +6,7 @@ import Readout from '../components/Readout.astro';
 import { tools } from '../data/tools';
 const t = tools.find((x) => x.slug === 'golden-hour')!;
 ---
-<Base title={t.name} description="Golden hour and blue hour times for any city and date, in local time. Works offline, no account, nothing sent anywhere." slug={t.slug}>
+<Base title={t.name} description="Golden hour and blue hour times for any city and date, in local time. No account, nothing sent anywhere." slug={t.slug}>
   <ToolHeader frame={t.frame} name={t.name} lede="Find out when the light is soft and warm (golden hour) or deep and even (blue hour) for any place and date. Times are shown in that place’s local time." />
   <div class="panel-grid develop">
     <section class="panel sticky" aria-label="Location and date">

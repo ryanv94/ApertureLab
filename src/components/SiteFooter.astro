@@ -6,6 +6,12 @@ const built = new Date().toISOString().slice(0, 10);
   <div class="wrap inner">
     <p class="privacy">{PRIVACY}</p>
     <p class="meta">
+      <a href="https://veitch.cc">veitch.cc</a>
+      <span>·</span>
+      <a href="https://www.instagram.com/ryan.veitch/">@ryan.veitch</a>
+      <span>·</span>
+      <a href="https://www.instagram.com/veitch.jpg/">@veitch.jpg</a>
+      <span>·</span>
       <a href="https://github.com/ryanv94/ApertureLab">Source on GitHub</a>
       <span>·</span>
       <span>Developed {built}</span>
@@ -16,7 +22,7 @@ const built = new Date().toISOString().slice(0, 10);
   .site-footer { border-top: 1px solid var(--line); padding-block: 28px; font-size: 12px; color: var(--text-dim); }
   .inner { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
   .privacy { max-width: 60ch; }
-  .meta { display: flex; gap: 8px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 8px; }
   a { text-decoration-color: var(--line); text-underline-offset: 3px; }
   a:hover { color: var(--text); text-decoration-color: var(--accent); }
 </style>

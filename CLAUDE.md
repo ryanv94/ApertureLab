@@ -108,7 +108,6 @@ docs/superpowers/             original design spec and implementation plan (hist
 - Palette worker replies have no request id, so a slow old result can overwrite a newer one.
 - EXIF dates of `0000:00:00` display as `0000-00-00`.
 - The "New version available" toast is short-lived with no Reload button; after a deploy, an open old page lazy-loading a hashed chunk can 404.
-- README overstates offline city search (`cities.json` is cached only after the first search).
 - Print crop box (`role="slider"`) lacks `aria-valuenow`; SELPHY paste always goes to magnet 1.
 - HEIC could be attempted in Safari instead of always rejected.
 
