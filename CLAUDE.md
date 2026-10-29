@@ -35,7 +35,7 @@ src/
   layouts/Base.astro          <head> (fonts, manifest, New Relic), nav, footer, global scripts
   layouts/newrelic.html       New Relic snippet, verbatim
   data/tools.ts               ToolMeta list (slug, frame "01".."10", name, short nav label, blurb) + PRIVACY
-  components/                 SiteNav, SiteFooter, ToolHeader, ToolFrame, ToolIcon, FilmStrip, ApertureMark,
+  components/                 SiteNav, SiteFooter, ToolHeader, ToolFrame, ToolIcon, FilmStrip, SiteLogo,
                               DropZone, Slider, NumberField, Select, Segmented, Readout, Button, ErrorBox, Modal
   pages/<slug>.astro          one page per tool + index.astro (contact sheet)
   tools/<tool>/logic.ts       pure maths/geometry, no DOM — unit-tested
