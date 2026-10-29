@@ -1,13 +1,13 @@
 ---
 import { tools } from '../data/tools';
-import ApertureMark from './ApertureMark.astro';
+import SiteLogo from './SiteLogo.astro';
 interface Props { slug?: string }
 const { slug } = Astro.props;
 ---
 <header class="site-header">
   <div class="wrap bar">
     <a href="index.html" class="wordmark" aria-label="ApertureLab home">
-      <ApertureMark />
+      <SiteLogo />
       <span>Aperture<em>Lab</em></span>
     </a>
     <nav class="desktop" aria-label="Tools">
@@ -26,7 +26,7 @@ const { slug } = Astro.props;
 
 <dialog id="site-menu" aria-label="Tools">
   <div class="menu-head">
-    <a href="index.html" class="wordmark"><ApertureMark /><span>Aperture<em>Lab</em></span></a>
+    <a href="index.html" class="wordmark"><SiteLogo /><span>Aperture<em>Lab</em></span></a>
     <button type="button" class="menu-close" aria-label="Close menu">
       <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.6" /></svg>
     </button>
@@ -63,8 +63,6 @@ const { slug } = Astro.props;
     font: 500 21px/1 var(--font-display); font-variation-settings: 'opsz' 48, 'SOFT' 0; letter-spacing: -.01em;
   }
   .wordmark em { font-style: italic; color: var(--accent); font-variation-settings: 'opsz' 48, 'SOFT' 100; }
-  .wordmark :global(.mark) { color: var(--text); transition: transform .6s var(--ease); }
-  .wordmark:hover :global(.mark) { transform: rotate(60deg); }
 
   .desktop { display: none; gap: 2px; }
   .desktop a {
