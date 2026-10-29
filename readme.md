@@ -53,7 +53,7 @@ These run at development time only; their outputs are committed.
 | `npm run fixtures` | Test images in `tests/fixtures/` |
 | `node scripts/fetch-logos.mjs` | Brand logos in `public/logos/` (from Wikimedia Commons) |
 | `node scripts/build-cities.mjs` | `public/data/cities.json` (from GeoNames) |
-| `node scripts/make-logo.mjs` | Header logo + favicon SVGs in `public/icons/` from the master art in `logo/` |
+| `node scripts/make-logo.mjs` | Header logo + favicon SVGs in `public/icons/` from the master art in `logo/` (`logo.svg` header, `icon.svg` favicon) |
 | `node scripts/make-icons.mjs` | App icons in `public/icons/` from `icon.svg` (run after make-logo) |
 
 ## Deploy
