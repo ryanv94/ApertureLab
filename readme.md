@@ -14,12 +14,12 @@ Free photography tools that run entirely in your browser — **[aperturelab.cc](
 | 04 | **EXIF Frame** | Reads camera, lens and exposure from the photo's EXIF, auto-detects the brand logo (15 brands, bundled locally) and renders a caption bar, Polaroid or even-border matte at full resolution. Every caption field is editable. |
 | 05 | **Panorama Splitter** | Slices a panorama into 2–10 seamless 4:5, 1:1, 1.91:1, 9:16 or custom slides, with crop-or-fit control, an optional overview cover slide (black, white or blurred background) and ZIP export. |
 | 06 | **Colour Palette** | k-means clustering in Lab colour space (3–10 colours, off the main thread), coverage per colour, RGB and luminance histograms; export a PNG strip, CSS variables or JSON. |
-| 07 | **Golden Hour** | Morning and evening golden and blue hour, sunrise, solar noon, sunset and day length for any date, in the location's own time zone. GPS, offline search over ~5,000 cities, or coordinates. Handles polar day and night. |
+| 07 | **Golden Hour** | Morning and evening golden and blue hour, sunrise, solar noon, sunset and day length for any date, in the location's own time zone. GPS, search over ~5,000 cities, or coordinates. Handles polar day and night. |
 | 08 | **Print DPI** | Effective DPI and quality rating at every common inch and ISO A size, crop lost per size, largest print at 300 and 150 DPI, and a draggable crop preview. |
 | 09 | **SELPHY Magnets** | Two 45×70 mm magnet photos on a 6×4 in Canon SELPHY sheet, pre-shrunk for borderless overscan (or exact / custom), with crop, rotate and cut marks. Exports 1800×1200 JPEG tagged at 300 DPI. |
 | 10 | **Collage** | Arrange 6–10 photos into a balanced, print-ready composition on any ISO, inch or metric paper size. Drag to swap, star a hero photo, export PNG / JPEG / PDF tagged with its DPI (up to 600). |
 
-Everything works offline once visited, and the site can be installed as an app. On phones, finished images open full size so you can press and hold to save them to Photos / the gallery (or use Share → Save Image).
+On phones, finished images open full size so you can press and hold to save them to Photos / the gallery (or use Share → Save Image).
 
 ## How it's built
 
