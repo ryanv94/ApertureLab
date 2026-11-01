@@ -12,7 +12,7 @@
   --warn: #F2B544;
   --bad: #E5352B;
 
-  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif; /* unslop-ignore: Darkroom display face */
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --radius: 4px;

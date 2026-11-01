@@ -29,7 +29,7 @@ function placeholder(ctx: CanvasRenderingContext2D, r: Rect, i: number) {
   ctx.strokeRect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
   ctx.setLineDash([]);
   ctx.fillStyle = 'rgba(18,16,14,.55)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.font = '500 40px "Fraunces Variable", Georgia, serif';
+  ctx.font = '500 40px "Fraunces Variable", Georgia, serif'; // unslop-ignore
   ctx.fillText(`Magnet ${i + 1}`, r.x + r.w / 2, r.y + r.h / 2 - 20);
   ctx.font = '500 22px "IBM Plex Mono", monospace';
   ctx.fillText('45 × 70 mm', r.x + r.w / 2, r.y + r.h / 2 + 26);

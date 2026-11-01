@@ -5,7 +5,7 @@ export type Watermark = {
   opacity: number; shadow: boolean; image: ImageBitmap | null; imageScale: number; position: Position; marginPct: number;
 };
 
-const FONTS = { serif: '"Fraunces Variable", Georgia, serif', mono: '"IBM Plex Mono", monospace', sans: '"Helvetica Neue", Helvetica, Arial, sans-serif' };
+const FONTS = { serif: '"Fraunces Variable", Georgia, serif', mono: '"IBM Plex Mono", monospace', sans: '"Helvetica Neue", Helvetica, Arial, sans-serif' }; // unslop-ignore
 export const wmFont = (wm: Watermark, px: number) => `${wm.font === 'serif' ? 500 : 600} ${px}px ${FONTS[wm.font]}`;
 
 /** Renders one output image at `scale` (1 = full output size). */
