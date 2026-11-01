@@ -5,7 +5,7 @@ export const tools: ToolMeta[] = [
   { slug: 'exposure-calculator', frame: '02', name: 'Exposure & ND', short: 'Exposure', blurb: 'Stack ND filters, reciprocate settings and run a bulb timer.' },
   { slug: 'resize-watermark', frame: '03', name: 'Resize & Watermark', short: 'Resize', blurb: 'Social presets, crops, text or logo watermarks, batch export.' },
   { slug: 'exif-frame', frame: '04', name: 'EXIF Frame', short: 'Frame', blurb: 'Gallery mattes captioned with your camera, lens and settings.' },
-  { slug: 'panorama-splitter', frame: '05', name: 'Panorama Splitter', short: 'Pano', blurb: 'Slice wide shots into a seamless swipeable carousel.' },
+  { slug: 'panorama-splitter', frame: '05', name: 'Panorama Splitter', short: 'Pano', blurb: 'Slice wide shots into a swipeable carousel.' },
   { slug: 'color-palette', frame: '06', name: 'Colour Palette', short: 'Palette', blurb: 'Extract the dominant colours and read the histogram.' },
   { slug: 'golden-hour', frame: '07', name: 'Golden Hour', short: 'Light', blurb: 'Golden and blue hour for any place and date.' },
   { slug: 'print-visualizer', frame: '08', name: 'Print DPI', short: 'Print', blurb: 'How big can it print? Every size, rated and cropped.' },

@@ -9,7 +9,7 @@ export type FrameOptions = {
 
 const FACES: Record<Typeface, { main: string; sub: string; caps: boolean; weight: number }> = {
   modern: { main: '"Helvetica Neue", Helvetica, Arial, sans-serif', sub: '"Helvetica Neue", Helvetica, Arial, sans-serif', caps: false, weight: 700 },
-  fineart: { main: '"Fraunces Variable", Georgia, serif', sub: '"Fraunces Variable", Georgia, serif', caps: false, weight: 500 },
+  fineart: { main: '"Fraunces Variable", Georgia, serif', sub: '"Fraunces Variable", Georgia, serif', caps: false, weight: 500 }, // unslop-ignore: Fraunces is the Darkroom display face
   technical: { main: '"IBM Plex Mono", monospace', sub: '"IBM Plex Mono", monospace', caps: true, weight: 600 },
 };
 
