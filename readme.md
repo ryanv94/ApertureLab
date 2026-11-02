@@ -25,7 +25,7 @@ On phones, finished images open full size so you can press and hold to save them
 
 - [Astro](https://astro.build) static site — every page is plain HTML at the same URL as before (`dof-visualizer.html`, …).
 - TypeScript tool logic (`src/tools/<tool>/logic.ts`) kept free of the DOM and unit-tested; `ui.ts` wires it to the page.
-- Hand-written CSS ("Darkroom" design system in `src/styles/`), Fraunces and IBM Plex Mono self-hosted.
+- Hand-written CSS (RV Photography design system in `src/styles/`), Poppins and Lora self-hosted.
 - Libraries bundled at build time, never loaded from a CDN: ExifReader, JSZip, SunCalc, Cropper.js.
 - Workbox service worker generated after each build (`integrations/service-worker.mjs`).
 - Analytics: New Relic browser agent (snippet in `src/layouts/newrelic.html`).

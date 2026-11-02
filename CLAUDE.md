@@ -35,14 +35,14 @@ src/
   layouts/Base.astro          <head> (fonts, manifest, New Relic), nav, footer, global scripts
   layouts/newrelic.html       New Relic snippet, verbatim
   data/tools.ts               ToolMeta list (slug, frame "01".."10", name, short nav label, blurb) + PRIVACY
-  components/                 SiteNav, SiteFooter, ToolHeader, ToolFrame, ToolIcon, FilmStrip, SiteLogo,
+  components/                 SiteNav, SiteFooter, ToolHeader, ToolFrame, ToolIcon, RidgeLine, SiteLogo,
                               DropZone, Slider, NumberField, Select, Segmented, Readout, Button, ErrorBox, Modal
-  pages/<slug>.astro          one page per tool + index.astro (contact sheet)
+  pages/<slug>.astro          one page per tool + index.astro (field-book index)
   tools/<tool>/logic.ts       pure maths/geometry, no DOM — unit-tested
   tools/<tool>/ui.ts          DOM wiring, imported by the page via <script>import '../tools/<tool>/ui';</script>
   lib/                        shared: image, format, stops, download, storage, url-state, toast, errors,
                               cropper, slider-fill, pwa
-  styles/tokens.css           design tokens   base.css: reset/layout/grain/.develop   controls.css: form controls,
+  styles/tokens.css           design tokens   base.css: reset/layout/.develop   controls.css: form controls,
                               buttons, segmented, readouts, error box, toasts, modal, stage, crop dialog
 integrations/service-worker.mjs   workbox-build generateSW after build (+ public/sw-cleanup.js removes legacy cache)
 public/                       CNAME, robots.txt, manifest.webmanifest, icons/, logos/, data/cities.json
@@ -73,11 +73,15 @@ docs/superpowers/             original design spec and implementation plan (hist
 7. Update the tools table in `readme.md`. The service worker precaches new files automatically.
 8. Run `npm test && npm run build && npm run test:e2e` before handing back.
 
-## Design system — "Darkroom"
+## Design system — RV Photography (endorsed brand)
 
-- Tokens (`src/styles/tokens.css`): `--bg #12100E`, `--surface #1C1916`, `--surface-2 #26221E`, `--line #3A342D`, `--text #EDE6DA`, `--text-dim #A39A8C`, `--accent #E5352B` (safelight red — the **only** interactive accent), `--amber #F2B544` (results/readouts), `--ok #8FBF6A`. Per-tool colours are deliberately not used.
-- Fonts: **Fraunces** (display, big numerals; variable `opsz`/`SOFT` axes) and **IBM Plex Mono** (UI/data), self-hosted via fontsource.
-- Motifs: film grain overlay, red safelight glow at the top, film-edge strips (`FilmStrip`, edge codes like `▸ 07A`), the contact-sheet home page with a grease-pencil hover mark, and the staggered `.develop` load reveal. All motion sits inside `prefers-reduced-motion: no-preference`.
+ApertureLab keeps its name and wears the RV Photography identity (brand pack v1.0; the footer carries the reversed "by RV Photography" lockup).
+
+- Tokens (`src/styles/tokens.css`): `--bg #141A1C` (Basalt-deep), `--surface #1D2528`, `--surface-2 #263135`, `--line #2E393C`, `--text #EEF1EE` (Glacier Mist), `--text-dim #A3ADB0`, `--accent #F27A35` / `--accent-hi #F59A62` (Alpenglow — the **only** interactive accent), `--on-accent #1C2427` (text on accent fills), `--fjord #7FB2B6` (results/readouts), `--ok`, `--warn`, `--bad`. Alpenglow is never body text.
+- Fonts: **Poppins** (display + UI, numerals use `tabular-nums`) and **Lora** (body, hints, captions), self-hosted via fontsource. Fraunces and IBM Plex Mono remain installed **only** for the user-selectable canvas export typefaces (EXIF Frame, Resize watermark, SELPHY) and are imported on those pages alone.
+- Motifs: the `RidgeLine` divider (the symbol's 50° ridge; `accent` adds the Alpenglow notch) under tool headers and above the footer, the field-book home page (numbered `ToolFrame` entries with an Alpenglow underline on hover), sharp 2px corners, and the staggered `.develop` load reveal. All motion sits inside `prefers-reduced-motion: no-preference`.
+- Logo rules: symbol ≥ 24px, horizontal lockup ≥ 140px wide, clear space ≥ the lens diameter; no recolouring, effects, outlines or badges; never the colour logo on a photo. No logo is added to user exports.
+- Export output defaults (frame ink, mattes, shadows, printed-sheet fills) are not part of the theme and must not change with it; tag such literals `// export default` (or `// data colour`) so `tests/unit/brand-tokens.test.ts` allows them.
 - Utilities: `.panel`, `.panel-title`, `.panel-grid`, `.row`, `.stack`, `.label`, `.readout`, `.readout-card`, `.hint`, `.stage`, `.stage-empty`, `.btn` / `.btn-primary` / `.btn-ghost` / `.btn-block`, `.check`, `.visually-hidden`.
 - Must work at 360px wide with no horizontal scroll (a layout test enforces this). Every input has a label; focus ring uses `--accent`.
 
@@ -135,4 +139,4 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 </frontend_aesthetics>
 """
 
-For this site the directive is already realised as "Darkroom": extend that system for new tools rather than inventing a new look per tool.
+For this site the directive is realised as the RV Photography system above: extend that system for new tools rather than inventing a new look per tool.
