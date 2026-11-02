@@ -64,8 +64,8 @@ function drawHistogram(canvas: HTMLCanvasElement, series: [Uint32Array, string][
 }
 
 function drawHistograms(h: Histograms) {
-  drawHistogram($<HTMLCanvasElement>('hist-rgb'), [[h.r, 'rgba(229,53,43,.75)'], [h.g, 'rgba(110,190,90,.7)'], [h.b, 'rgba(60,110,230,.75)']]);
-  drawHistogram($<HTMLCanvasElement>('hist-l'), [[h.l, 'rgba(237,230,218,.7)']]);
+  drawHistogram($<HTMLCanvasElement>('hist-rgb'), [[h.r, 'rgba(229,53,43,.75)'], [h.g, 'rgba(110,190,90,.7)'], [h.b, 'rgba(60,110,230,.75)']]); // data colour
+  drawHistogram($<HTMLCanvasElement>('hist-l'), [[h.l, 'rgba(238,241,238,.7)']]);
 }
 
 function analyse() {
@@ -123,13 +123,13 @@ $('dl-png').addEventListener('click', async () => {
   const c = document.createElement('canvas');
   c.width = p.width + pad * 2; c.height = p.height + band + pad * 3;
   const ctx = c.getContext('2d')!;
-  ctx.fillStyle = '#12100E'; ctx.fillRect(0, 0, c.width, c.height);
+  ctx.fillStyle = '#141A1C'; ctx.fillRect(0, 0, c.width, c.height);
   ctx.drawImage(bitmap, pad, pad, p.width, p.height);
   const w = p.width / swatches.length, y = pad * 2 + p.height;
-  await document.fonts.load(`500 ${band * 0.12}px "IBM Plex Mono"`).catch(() => null);
+  await document.fonts.load(`500 ${band * 0.12}px "Poppins"`).catch(() => null);
   swatches.forEach((s, i) => {
     ctx.fillStyle = s.hex; ctx.fillRect(pad + i * w, y, w - pad / 3, band * 0.72);
-    ctx.fillStyle = '#EDE6DA'; ctx.font = `500 ${band * 0.12}px "IBM Plex Mono", monospace`;
+    ctx.fillStyle = '#EEF1EE'; ctx.font = `500 ${band * 0.12}px "Poppins", sans-serif`;
     ctx.fillText(s.hex.toUpperCase(), pad + i * w, y + band * 0.92);
   });
   try {

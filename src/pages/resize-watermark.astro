@@ -1,4 +1,8 @@
 ---
+import '@fontsource-variable/fraunces/full.css'; // export typeface (canvas text)
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
 import 'cropperjs/dist/cropper.css';
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
@@ -98,6 +102,6 @@ const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr:
   .out { display: grid; gap: 14px; min-width: 0; }
   #preview-wrap { display: contents; }
   .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
-  .actions .val { color: var(--amber); }
+  .actions .val { color: var(--fjord); }
   .btns { display: flex; gap: 8px; }
 </style>

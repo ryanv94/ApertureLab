@@ -67,12 +67,12 @@ const t = tools.find((x) => x.slug === 'dof-visualizer')!;
   .note { max-width: 70ch; }
   :global(#diagram .axis) { stroke: var(--line); stroke-width: 1.5; }
   :global(#diagram .tick) { stroke: var(--text-dim); }
-  :global(#diagram .tl) { fill: var(--text-dim); font: 11px var(--font-mono); text-anchor: middle; }
-  :global(#diagram .zone) { fill: rgb(242 181 68 / .16); stroke: var(--amber); stroke-width: 1.5; transition: x .25s var(--ease), width .25s var(--ease); }
-  :global(#diagram .zone-edge) { stroke: var(--amber); stroke-dasharray: 3 3; }
+  :global(#diagram .tl) { fill: var(--text-dim); font: 11px var(--font-display); text-anchor: middle; }
+  :global(#diagram .zone) { fill: rgb(127 178 182 / .16); stroke: var(--fjord); stroke-width: 1.5; transition: x .25s var(--ease), width .25s var(--ease); }
+  :global(#diagram .zone-edge) { stroke: var(--fjord); stroke-dasharray: 3 3; }
   :global(#diagram .hyper) { stroke: var(--text-dim); stroke-dasharray: 2 4; }
-  :global(#diagram .hl) { fill: var(--text-dim); font: 11px var(--font-mono); text-anchor: middle; }
-  :global(#diagram .el) { fill: var(--amber); font: 600 12px var(--font-mono); }
+  :global(#diagram .hl) { fill: var(--text-dim); font: 11px var(--font-display); text-anchor: middle; }
+  :global(#diagram .el) { fill: var(--fjord); font: 600 12px var(--font-display); }
   :global(#diagram .el.end) { text-anchor: end; }
   :global(#diagram .cam) { fill: var(--surface-2); stroke: var(--text); stroke-width: 1.2; }
   :global(#diagram .subject) { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; transition: transform .25s var(--ease); }

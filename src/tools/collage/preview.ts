@@ -26,7 +26,7 @@ export function drawLayout(
   });
   if (mark && mark.target >= 0 && mark.target !== mark.from) {
     const c = cells[mark.target];
-    ctx.strokeStyle = '#e5352b';
+    ctx.strokeStyle = '#F27A35';
     ctx.lineWidth = 3;
     ctx.strokeRect(c.x * scale + 1.5, c.y * scale + 1.5, c.w * scale - 3, c.h * scale - 3);
   }

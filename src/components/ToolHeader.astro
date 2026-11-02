@@ -1,17 +1,18 @@
 ---
 import { tools } from '../data/tools';
+import RidgeLine from './RidgeLine.astro';
 interface Props { frame: string; name: string; lede: string }
 const { frame, name, lede } = Astro.props;
 ---
 <div class="tool-header develop">
-  <p class="edge"><span>▸ {frame}A</span><span class="dash"></span><span>Frame {frame} / {String(tools.length).padStart(2, '0')}</span></p>
+  <p class="kicker">{frame} / {String(tools.length).padStart(2, '0')}</p>
   <h1>{name}</h1>
   <p class="lede">{lede}</p>
+  <RidgeLine accent />
 </div>
 <style>
-  .tool-header { padding-block: 20px 28px; }
-  .edge { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; }
-  .dash { flex: 0 0 48px; height: 1px; background: var(--accent); opacity: .5; }
-  h1 { font-size: clamp(36px, 7vw, 68px); margin-top: 12px; letter-spacing: -.02em; font-variation-settings: 'opsz' 144, 'SOFT' 30; }
-  .lede { margin-top: 12px; max-width: 62ch; color: var(--text-dim); }
+  .tool-header { padding-block: 20px 4px; }
+  .kicker { font: 600 12px/1 var(--font-display); letter-spacing: .16em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  h1 { font-size: clamp(32px, 6vw, 56px); margin-top: 14px; letter-spacing: -.01em; overflow-wrap: anywhere; }
+  .lede { margin-top: 12px; max-width: 62ch; color: var(--text-dim); font-family: var(--font-body); }
 </style>

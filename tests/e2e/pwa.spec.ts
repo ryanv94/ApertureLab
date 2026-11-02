@@ -5,8 +5,8 @@ test('manifest describes the app', async ({ page, request }) => {
   const href = await page.locator('link[rel=manifest]').getAttribute('href');
   const m = await (await request.get(`/${href}`)).json();
   expect(m.name).toBe('ApertureLab');
-  expect(m.theme_color).toBe('#12100E');
-  expect(m.background_color).toBe('#12100E');
+  expect(m.theme_color).toBe('#141A1C');
+  expect(m.background_color).toBe('#141A1C');
   const sizes = m.icons.map((i: { sizes: string; purpose?: string }) => `${i.sizes}:${i.purpose ?? 'any'}`);
   expect(sizes).toEqual(expect.arrayContaining(['192x192:any', '512x512:any', '512x512:maskable']));
 });

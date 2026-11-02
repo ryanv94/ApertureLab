@@ -44,7 +44,7 @@ export function renderFrame(canvas: HTMLCanvasElement, bitmap: ImageBitmap, o: F
   ctx.drawImage(bitmap, f.image.x, f.image.y, f.image.w, f.image.h);
 
   const dark = isDark(o.matte);
-  const ink = dark ? '#EDE6DA' : '#1B1916';
+  const ink = dark ? '#EDE6DA' : '#1B1916'; // export default
   const dim = dark ? '#9C9384' : '#7A736A';
   if (o.keyline) {
     const k = Math.max(1, Math.min(f.image.w, f.image.h) * 0.0012);
