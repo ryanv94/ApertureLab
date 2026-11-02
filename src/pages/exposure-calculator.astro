@@ -76,7 +76,7 @@ const t = tools.find((x) => x.slug === 'exposure-calculator')!;
   .chips :global(li) { display: inline-flex; align-items: center; gap: 8px; padding: 6px 6px 6px 10px; font-size: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; }
   .chips :global(button) { width: 22px; height: 22px; border-radius: 50%; border: 0; background: var(--bg); color: var(--text-dim); cursor: pointer; }
   .chips :global(button:hover) { color: var(--accent); }
-  .hint .val { color: var(--amber); }
+  .hint .val { color: var(--fjord); }
   .result { display: grid; gap: 28px; align-items: center; }
   @media (min-width: 900px) { .result { grid-template-columns: 1fr auto; padding: 32px; } }
   .k { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); }
@@ -94,6 +94,6 @@ const t = tools.find((x) => x.slug === 'exposure-calculator')!;
   [data-state='done'] .ring .bar { stroke: var(--ok); }
   .timer-btns { display: flex; gap: 8px; }
   @media (prefers-reduced-motion: no-preference) {
-    [data-state='running'] .ring { filter: drop-shadow(0 0 10px rgb(229 53 43 / .35)); }
+    [data-state='running'] .ring { filter: drop-shadow(0 0 10px rgb(242 122 53 / .35)); }
   }
 </style>

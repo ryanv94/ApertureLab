@@ -86,18 +86,18 @@ const groupLabel = { ISO: 'ISO A-series', Inch: 'Inch standards', Metric: 'Metri
   .out { display: grid; gap: 14px; min-width: 0; }
   .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
   .btns { display: flex; gap: 8px; }
-  .val { color: var(--amber); font-weight: 600; }
-  .notice { color: var(--amber); }
+  .val { color: var(--fjord); font-weight: 600; }
+  .notice { color: var(--fjord); }
   #stage { touch-action: none; cursor: grab; }
   #stage:global(.dragging) { cursor: grabbing; }
   .thumbs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
   .thumbs:empty { display: none; }
   .thumbs :global(li) { background: var(--bg); border: 1px solid var(--line); border-radius: 3px; padding: 6px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-  .thumbs :global(li.is-hero) { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber); }
+  .thumbs :global(li.is-hero) { border-color: var(--fjord); box-shadow: 0 0 0 1px var(--fjord); }
   .thumbs :global(canvas) { width: 100%; height: 72px; object-fit: contain; background: #000; box-shadow: none; }
   .thumbs :global(.thumb-name) { font-size: 11px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .thumbs :global(.thumb-actions) { display: flex; gap: 6px; }
   .thumbs :global(.thumb-actions .btn) { padding: 5px 8px; font-size: 11px; white-space: nowrap; }
   .thumbs :global(.thumb-actions .btn:first-child) { flex: 1; }
-  .thumbs :global(.thumb-actions .btn[aria-pressed='true']) { background: var(--amber); border-color: var(--amber); color: #12100e; }
+  .thumbs :global(.thumb-actions .btn[aria-pressed='true']) { background: var(--fjord); border-color: var(--fjord); color: var(--on-accent); }
 </style>

@@ -1,4 +1,8 @@
 ---
+import '@fontsource-variable/fraunces/full.css'; // export typeface (canvas text)
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
 import 'cropperjs/dist/cropper.css';
 import Base from '../layouts/Base.astro';
 import ToolHeader from '../components/ToolHeader.astro';
@@ -53,7 +57,7 @@ const t = tools.find((x) => x.slug === 'selphy-layout')!;
   <script>import '../tools/selphy/ui';</script>
 </Base>
 <style>
-  .hint .val { color: var(--amber); }
+  .hint .val { color: var(--fjord); }
   .slot { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); display: grid; gap: 10px; }
   .slot-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
   .slot-name { font: 500 18px/1 var(--font-display); }
