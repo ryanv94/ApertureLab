@@ -42,13 +42,13 @@ const { id, label = 'Drop a photo', multiple = false, compact = false } = Astro.
 <style>
   .dz-btn {
     width: 100%; display: grid; justify-items: center; gap: 6px; padding: 28px 16px; cursor: pointer;
-    background: var(--bg); border: 1px dashed #564d43; border-radius: var(--radius); color: var(--text);
+    background: var(--bg); border: 1px dashed color-mix(in srgb, var(--line), var(--text-dim) 35%); border-radius: var(--radius); color: var(--text);
     transition: border-color .15s, background .15s;
   }
   .compact .dz-btn { padding: 14px; }
   .dz-btn svg { color: var(--text-dim); transition: transform .3s var(--ease); }
   .dz-label { font: 500 18px/1.2 var(--font-display); }
   .dz-hint { font-size: 11px; color: var(--text-dim); }
-  .dz-btn:hover, .over .dz-btn { border-color: var(--accent); background: rgb(242 122 53 / .05); }
+  .dz-btn:hover, .over .dz-btn { border-color: var(--accent); background: rgb(242 122 53 / .06); }
   .dz-btn:hover svg, .over .dz-btn svg { transform: translateY(-2px); color: var(--text); }
 </style>

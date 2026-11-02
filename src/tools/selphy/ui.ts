@@ -23,12 +23,12 @@ function scales(): { w: number; h: number } {
 const filled = (i: 0 | 1): Slot => (i === 1 && $('same').checked ? slots[0] : slots[i]);
 
 function placeholder(ctx: CanvasRenderingContext2D, r: Rect, i: number) {
-  ctx.fillStyle = 'rgba(18,16,14,.04)';
+  ctx.fillStyle = 'rgba(20,26,28,.04)';
   ctx.fillRect(r.x, r.y, r.w, r.h);
-  ctx.strokeStyle = 'rgba(18,16,14,.25)'; ctx.lineWidth = 4; ctx.setLineDash([16, 14]);
+  ctx.strokeStyle = 'rgba(20,26,28,.25)'; ctx.lineWidth = 4; ctx.setLineDash([16, 14]);
   ctx.strokeRect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
   ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(18,16,14,.55)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(20,26,28,.55)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.font = '500 40px "Fraunces Variable", Georgia, serif'; // unslop-ignore
   ctx.fillText(`Magnet ${i + 1}`, r.x + r.w / 2, r.y + r.h / 2 - 20);
   ctx.font = '500 22px "IBM Plex Mono", monospace';
