@@ -34,7 +34,7 @@ const { slug } = Astro.props;
   <nav aria-label="Tools" class="sheet">
     {tools.map((t, i) => (
       <a href={`${t.slug}.html`} aria-current={t.slug === slug ? 'page' : undefined} class="sheet-frame" style={`--n:${i}`}>
-        <span class="edge">▸ {t.frame}A</span>
+        <span class="edge">{t.frame}</span>
         <span class="name">{t.name}</span>
       </a>
     ))}
@@ -66,11 +66,11 @@ const { slug } = Astro.props;
 
   .desktop { display: none; gap: 2px; }
   .desktop a {
-    position: relative; text-decoration: none; font-size: 12px; letter-spacing: .02em;
+    position: relative; text-decoration: none; font: 500 12px/1 var(--font-display); letter-spacing: .02em;
     padding: 8px 10px; color: var(--text-dim); border-radius: var(--radius); white-space: nowrap;
     transition: color .2s, background .2s;
   }
-  .desktop .num { font-size: 9px; vertical-align: super; margin-right: 3px; color: var(--line); transition: color .2s; }
+  .desktop .num { font-size: 9px; vertical-align: super; margin-right: 3px; color: var(--fjord); transition: color .2s; }
   .desktop a:hover { color: var(--text); background: var(--surface); }
   .desktop a:hover .num { color: var(--accent); }
   .desktop a[aria-current='page'] { color: var(--text); }
@@ -98,9 +98,9 @@ const { slug } = Astro.props;
   .sheet-frame {
     display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
     aspect-ratio: 3 / 2; padding: 12px; text-decoration: none;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 2px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
   }
-  .sheet-frame .edge { font-size: 10px; color: var(--accent); letter-spacing: .1em; }
+  .sheet-frame .edge { font: 600 11px/1 var(--font-display); color: var(--fjord); letter-spacing: .1em; font-variant-numeric: tabular-nums; }
   .sheet-frame .name { font: 500 18px/1.1 var(--font-display); }
   .sheet-frame[aria-current='page'] { border-color: var(--accent); }
   @media (prefers-reduced-motion: no-preference) {

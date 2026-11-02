@@ -54,3 +54,16 @@ test('footer RV lockup keeps its minimum size at 360px', async ({ page }) => {
   expect((await l.boundingBox())!.width).toBeGreaterThanOrEqual(140);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
 });
+
+for (const slug of PAGES) {
+  test(`${slug}: Darkroom motifs are gone, ridge divider present`, async ({ page }) => {
+    await page.goto(`/${slug}.html`);
+    await expect(page.locator('.film-strip')).toHaveCount(0);
+    expect(await page.locator('body').innerText()).not.toMatch(/▸\s*\d\d/);
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundImage)).toBe('none');
+    expect(await page.evaluate(() => getComputedStyle(document.body, '::before').content)).toBe('none');
+    if (slug === 'index') await expect(page.locator('main .ridge')).toHaveCount(1);
+    else await expect(page.locator('.tool-header .ridge')).toHaveCount(1);
+    await expect(page.locator('.site-footer .ridge')).toHaveCount(1);
+  });
+}

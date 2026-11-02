@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolFrame from '../components/ToolFrame.astro';
-import FilmStrip from '../components/FilmStrip.astro';
+import RidgeLine from '../components/RidgeLine.astro';
 import { tools, PRIVACY } from '../data/tools';
 ---
 <Base title="ApertureLab — darkroom tools for photographers" description="Free, private photography tools that run entirely in your browser: depth of field, exposure, EXIF frames, panoramas, golden hour, print sizes and more.">
@@ -20,7 +20,7 @@ import { tools, PRIVACY } from '../data/tools';
     <div class="rail" aria-hidden="true"></div>
   </section>
 
-  <FilmStrip />
+  <RidgeLine accent />
 
   <section class="privacy-block develop" aria-labelledby="privacy-title">
     <h2 id="privacy-title">Your negatives stay in your darkroom.</h2>

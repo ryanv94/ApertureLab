@@ -1,0 +1,20 @@
+---
+interface Props { accent?: boolean }
+const { accent = false } = Astro.props;
+---
+<div class="ridge" aria-hidden="true">
+  <span class="flat short"></span>
+  <svg viewBox="0 0 70 20" width="70" height="20" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 19 L25 1 L38 15 L47 5 L69 19" class="rock" />
+    {accent && <path d="M13 10 L25 1 L31 8" class="glow" />}
+  </svg>
+  <span class="flat"></span>
+</div>
+<style>
+  .ridge { display: flex; align-items: flex-end; gap: 0; height: 20px; margin-block: 24px; }
+  .flat { flex: 1 1 auto; height: 1px; background: var(--line); align-self: flex-end; }
+  .flat.short { flex: 0 0 24px; }
+  svg { flex: none; stroke-width: 1.5; }
+  .rock { stroke: var(--line); }
+  .glow { stroke: var(--accent); stroke-width: 2; }
+</style>
