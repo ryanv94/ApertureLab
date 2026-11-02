@@ -26,12 +26,12 @@ const { slug } = Astro.props;
     <path d="M22 6v28M42 6v28" stroke="var(--accent)" stroke-dasharray="2 2" />
   </>}
   {slug === 'color-palette' && <>
-    {['var(--accent)', 'var(--fjord)', '#8FBF6A', '#2B4C8C', 'currentColor'].map((c, i) => <rect x={6 + i * 11} y="8" width="9" height="16" fill={c} fill-opacity={c === 'currentColor' ? .5 : .9} stroke="none" />)}
+    {['var(--accent)', 'var(--fjord)', '#8FBF6A', 'var(--fjord)', 'currentColor'].map((c, i) => <rect x={6 + i * 11} y="8" width="9" height="16" fill={c} fill-opacity={c === 'currentColor' ? .5 : .9} stroke="none" />)}
     <path d="M6 34c6-8 10-2 16-6s8-4 14 0 12 2 22-4" />
   </>}
   {slug === 'golden-hour' && <>
     <path d="M4 30h56" /><path d="M18 30a14 14 0 0 1 28 0" stroke="var(--fjord)" />
-    <path d="M32 8v4M14 14l3 3M50 14l-3 3" /><path d="M4 36h56" stroke="#2B4C8C" stroke-width="2" />
+    <path d="M32 8v4M14 14l3 3M50 14l-3 3" /><path d="M4 36h56" stroke="var(--fjord)" stroke-width="2" />
   </>}
   {slug === 'print-visualizer' && <>
     <rect x="6" y="4" width="22" height="32" /><rect x="34" y="12" width="14" height="24" /><rect x="52" y="22" width="8" height="14" />

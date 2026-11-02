@@ -4,26 +4,24 @@ import ToolFrame from '../components/ToolFrame.astro';
 import RidgeLine from '../components/RidgeLine.astro';
 import { tools, PRIVACY } from '../data/tools';
 ---
-<Base title="ApertureLab — darkroom tools for photographers" description="Free, private photography tools that run entirely in your browser: depth of field, exposure, EXIF frames, panoramas, golden hour, print sizes and more.">
+<Base title="ApertureLab — free photography tools" description="Free, private photography tools that run entirely in your browser: depth of field, exposure, EXIF frames, panoramas, golden hour, print sizes and more.">
   <section class="hero develop">
-    <p class="kicker">▸ 00 &nbsp;Ten tools · one darkroom</p>
+    <p class="kicker">00 · Ten tools</p>
     <h1>Free photography <em>calculators</em><br />and image tools.</h1>
     <p class="lede">For working photographers. Everything runs on your own device and nothing leaves it. Nothing to install, no account.</p>
   </section>
 
   <section class="sheet" aria-labelledby="sheet-title">
     <h2 id="sheet-title" class="visually-hidden">Tools</h2>
-    <div class="rail" aria-hidden="true"></div>
     <div class="frames develop">
       {tools.map((t) => <ToolFrame tool={t} />)}
     </div>
-    <div class="rail" aria-hidden="true"></div>
   </section>
 
   <RidgeLine accent />
 
   <section class="privacy-block develop" aria-labelledby="privacy-title">
-    <h2 id="privacy-title">Your negatives stay in your darkroom.</h2>
+    <h2 id="privacy-title">Your photos stay on your device.</h2>
     <p>{PRIVACY}</p>
     <ul>
       <li><strong>On-device</strong><span>Images are decoded and processed by your browser. They never leave your device.</span></li>
@@ -34,24 +32,11 @@ import { tools, PRIVACY } from '../data/tools';
 
 <style>
   .hero { padding-block: clamp(28px, 6vw, 72px) 40px; max-width: 980px; }
-  .kicker { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
-  h1 {
-    margin-top: 18px; font-size: clamp(40px, 8vw, 92px); letter-spacing: -.03em; line-height: .98;
-    font-variation-settings: 'opsz' 144, 'SOFT' 20; font-weight: 400;
-  }
-  h1 em { font-style: italic; color: var(--accent); font-variation-settings: 'opsz' 144, 'SOFT' 100; }
-  .lede { margin-top: 22px; max-width: 58ch; color: var(--text-dim); font-size: 15px; }
+  .kicker { font: 600 12px/1 var(--font-display); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin-top: 18px; font-size: clamp(34px, 7vw, 76px); letter-spacing: -.02em; line-height: 1.05; font-weight: 500; overflow-wrap: anywhere; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { margin-top: 22px; max-width: 58ch; color: var(--text-dim); font-size: 16px; font-family: var(--font-body); }
 
-  .sheet {
-    background: #0b0a09; border: 1px solid #1f1b17; border-radius: 3px; padding: 0 clamp(10px, 2vw, 18px);
-    box-shadow: inset 0 0 80px rgb(0 0 0 / .6);
-  }
-  .rail {
-    height: 26px;
-    background:
-      repeating-linear-gradient(90deg, transparent 0 9px, #2a2520 9px 21px, transparent 21px 30px);
-    background-size: 100% 10px; background-position: 0 50%; background-repeat: repeat-x;
-  }
   .frames { display: grid; gap: clamp(10px, 1.6vw, 18px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
 
   .privacy-block { display: grid; gap: 18px; max-width: 980px; }
