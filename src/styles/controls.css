@@ -52,7 +52,7 @@ input[type='range']:focus-visible::-webkit-slider-thumb { background: var(--acce
 .btn-block { width: 100%; }
 
 /* Segmented control */
-.segmented { border: 0; padding: 0; margin: 0; min-width: 0; }
+.segmented { border: 0; padding: 0; margin-inline: 0; min-width: 0; } /* vertical margin comes from .panel / .stack rhythm */
 .segmented legend { padding: 0; }
 .seg-options { display: flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 .seg-options label { flex: 1 1 auto; position: relative; }

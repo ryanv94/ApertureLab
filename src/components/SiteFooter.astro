@@ -1,7 +1,7 @@
 ---
 import { PRIVACY } from '../data/tools';
 import RidgeLine from './RidgeLine.astro';
-const built = new Date().toISOString().slice(0, 10);
+const built = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 ---
 <footer class="site-footer">
   <div class="wrap"><RidgeLine /></div>
@@ -16,13 +16,12 @@ const built = new Date().toISOString().slice(0, 10);
     <p class="meta">
       <a href="https://veitch.cc">veitch.cc</a>
       <span>·</span>
-      <a href="https://www.instagram.com/ryan.veitch/">@ryan.veitch</a>
-      <span>·</span>
+      <span class="dim">Instagram</span> <a href="https://www.instagram.com/ryan.veitch/">@ryan.veitch</a>
       <a href="https://www.instagram.com/veitch.jpg/">@veitch.jpg</a>
       <span>·</span>
       <a href="https://github.com/ryanv94/ApertureLab">Source on GitHub</a>
       <span>·</span>
-      <span>Developed {built}</span>
+      <span>Updated {built}</span>
     </p>
   </div>
 </footer>
@@ -31,6 +30,7 @@ const built = new Date().toISOString().slice(0, 10);
   .inner { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
   .about { display: grid; gap: 16px; }
   .privacy { max-width: 60ch; font-family: var(--font-body); }
+  .by span { font: 500 11px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
   .by { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; justify-self: start; }
   .rv-lockup { display: block; width: 180px; min-width: 140px; max-width: 100%; height: auto; }
   .meta { display: flex; flex-wrap: wrap; gap: 4px 8px; }

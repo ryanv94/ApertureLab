@@ -158,4 +158,18 @@ $('coords-apply').addEventListener('click', async () => {
 
 $('date').addEventListener('change', render);
 if (loc) { $('place').textContent = loc.label; render(); }
+else {
+  // First visit: start from the biggest city in the device's time zone so the page opens on real output.
+  // Not saved — only an explicit choice is remembered.
+  const deviceTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  loadCities().then((all) => {
+    if (loc) return;
+    const c = all.filter((x) => x.tz === deviceTz).sort((x, y) => y.pop - x.pop)[0];
+    if (!c) return;
+    loc = { label: `${c.name}, ${[c.admin, regionName(c.country)].filter(Boolean).join(', ')}`, lat: c.lat, lon: c.lon, tz: c.tz };
+    $('place').textContent = loc.label;
+    $('date').value = todayIn(loc.tz);
+    render();
+  }).catch(() => { /* stay on the empty state */ });
+}
 setInterval(() => { if (loc && !document.hidden) render(); }, 60_000);

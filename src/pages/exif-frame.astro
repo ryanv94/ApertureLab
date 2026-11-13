@@ -4,6 +4,7 @@ import '@fontsource/ibm-plex-mono/latin-400.css';
 import '@fontsource/ibm-plex-mono/latin-500.css';
 import '@fontsource/ibm-plex-mono/latin-600.css';
 import Base from '../layouts/Base.astro';
+import StageEmpty from '../components/StageEmpty.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import DropZone from '../components/DropZone.astro';
 import Slider from '../components/Slider.astro';
@@ -33,12 +34,12 @@ const text = (id: string, label: string, ph = '') => ({ id, label, ph });
       <div id="fields" class="fields" hidden>
         <p class="panel-title">Caption (from EXIF — editable)</p>
         <div class="field"><label class="label" for="f-model">Camera</label><input type="text" id="f-model" /></div>
-        <div class="field"><label class="label" for="f-lens">Lens</label><input type="text" id="f-lens" /></div>
+        <div class="field"><label class="label" for="f-lens">Lens</label><input type="text" id="f-lens" placeholder="e.g. 24–70mm f/2.8" /></div>
         <div class="grid4">
-          <div class="field"><label class="label" for="f-focal">mm</label><input type="text" id="f-focal" inputmode="decimal" /></div>
-          <div class="field"><label class="label" for="f-aperture">f/</label><input type="text" id="f-aperture" inputmode="decimal" /></div>
-          <div class="field"><label class="label" for="f-shutter">Shutter</label><input type="text" id="f-shutter" /></div>
-          <div class="field"><label class="label" for="f-iso">ISO</label><input type="text" id="f-iso" inputmode="numeric" /></div>
+          <div class="field"><label class="label" for="f-focal">mm</label><input type="text" id="f-focal" inputmode="decimal" placeholder="50" /></div>
+          <div class="field"><label class="label" for="f-aperture">f/</label><input type="text" id="f-aperture" inputmode="decimal" placeholder="1.8" /></div>
+          <div class="field"><label class="label" for="f-shutter">Shutter</label><input type="text" id="f-shutter" placeholder="1/250" /></div>
+          <div class="field"><label class="label" for="f-iso">ISO</label><input type="text" id="f-iso" inputmode="numeric" placeholder="100" /></div>
         </div>
         <div class="field"><label class="label" for="f-date">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD" /></div>
       </div>
@@ -46,7 +47,7 @@ const text = (id: string, label: string, ph = '') => ({ id, label, ph });
     <section class="out" aria-label="Preview">
       <div class="stage">
         <canvas id="preview" hidden></canvas>
-        <p id="empty" class="stage-empty">Your framed photo appears here.</p>
+        <StageEmpty kind="frame">Drop a photo and its EXIF caption is set into a matte here.</StageEmpty>
       </div>
       <div class="actions">
         <Segmented id="format" label="Format" hideLabel options={[{ value: 'jpg', label: 'JPEG' }, { value: 'png', label: 'PNG' }]} value="jpg" />
@@ -60,5 +61,6 @@ const text = (id: string, label: string, ph = '') => ({ id, label, ph });
   .fields { display: grid; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
   .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
   .out { display: grid; gap: 14px; min-width: 0; }
+  .out:has(#empty:not([hidden])) .actions { display: none; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; align-items: center; }
 </style>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import StageEmpty from '../components/StageEmpty.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import DropZone from '../components/DropZone.astro';
 import Slider from '../components/Slider.astro';
@@ -40,7 +41,7 @@ const t = tools.find((x) => x.slug === 'panorama-splitter')!;
       <ErrorBox id="warn" />
       <div class="phone">
         <div id="slides" class="slides" tabindex="0" aria-label="Carousel preview, scroll sideways"></div>
-        <p id="empty" class="stage-empty">Slides appear here, side by side, as they’ll swipe.</p>
+        <StageEmpty kind="pano">Slides appear here, side by side, as they’ll swipe.</StageEmpty>
       </div>
       <div class="actions"><button type="button" class="btn btn-primary" id="download-zip" disabled>Download all (.zip)</button></div>
     </section>
@@ -61,5 +62,6 @@ const t = tools.find((x) => x.slug === 'panorama-splitter')!;
   .slides :global(figcaption) { display: flex; gap: 10px; align-items: center; justify-content: space-between; font-size: 11px; padding-top: 8px; }
   .slides :global(.slide-dl) { width: 26px; height: 26px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); cursor: pointer; }
   .slides :global(.slide-dl:hover) { border-color: var(--accent); }
+  .out:has(#empty:not([hidden])) .actions { display: none; }
   .actions { display: flex; justify-content: flex-end; }
 </style>
