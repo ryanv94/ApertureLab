@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import StageEmpty from '../components/StageEmpty.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import NumberField from '../components/NumberField.astro';
 import Readout from '../components/Readout.astro';
@@ -21,8 +22,8 @@ const t = tools.find((x) => x.slug === 'golden-hour')!;
       <details>
         <summary>Enter coordinates</summary>
         <div class="row coords">
-          <NumberField id="lat" label="Latitude" min={-90} max={90} />
-          <NumberField id="lon" label="Longitude" min={-180} max={180} />
+          <NumberField id="lat" label="Latitude" min={-90} max={90} placeholder="51.51" />
+          <NumberField id="lon" label="Longitude" min={-180} max={180} placeholder="-0.13" />
         </div>
         <button type="button" class="btn btn-block" id="coords-apply">Use coordinates</button>
       </details>
@@ -31,7 +32,7 @@ const t = tools.find((x) => x.slug === 'golden-hour')!;
     </section>
 
     <section class="out" aria-label="Light times">
-      <p id="empty" class="stage stage-empty">Choose a location to see today’s light.</p>
+      <StageEmpty kind="light" stage>Choose a place to see its golden and blue hours.</StageEmpty>
       <div id="results" hidden>
         <div class="head">
           <p class="place" id="place"></p>

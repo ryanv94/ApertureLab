@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 import '@fontsource/ibm-plex-mono/latin-600.css';
 import 'cropperjs/dist/cropper.css';
 import Base from '../layouts/Base.astro';
+import StageEmpty from '../components/StageEmpty.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import DropZone from '../components/DropZone.astro';
 import Slider from '../components/Slider.astro';
@@ -29,7 +30,7 @@ const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr:
       <p class="panel-title">Size</p>
       <Select id="preset" label="Preset" options={SIZE_PRESETS.map((p) => ({ value: p.id, label: p.label }))} value="ig-portrait" />
       <div id="custom-size" hidden>
-        <div class="row"><NumberField id="cw" label="Width" min={1} step={1} unit="px" /><NumberField id="ch" label="Height" min={1} step={1} unit="px" /></div>
+        <div class="row"><NumberField id="cw" label="Width" min={1} step={1} unit="px" placeholder="1080" /><NumberField id="ch" label="Height" min={1} step={1} unit="px" placeholder="1350" /></div>
         <label class="check" style="margin-top:10px"><input type="checkbox" id="lock" checked /> Keep proportions</label>
       </div>
       <Segmented id="mode" label="Fitting" options={[{ value: 'fill', label: 'Fill (crop centre)' }, { value: 'fit', label: 'Fit' }, { value: 'crop', label: 'Crop…' }]} value="fill" />
@@ -70,7 +71,7 @@ const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr:
     <section class="out" aria-label="Preview">
       <div class="stage">
         <div id="preview-wrap"></div>
-        <p id="empty" class="stage-empty">Your resized photo appears here.</p>
+        <StageEmpty kind="resize">Drop a photo and the resized crop appears here, ready to download.</StageEmpty>
       </div>
       <div class="actions">
         <p class="hint"><span id="out-dims"></span> · about <span id="est" class="val">—</span></p>
@@ -101,6 +102,7 @@ const posLabel: Record<string, string> = { tl: 'Top left', tc: 'Top centre', tr:
   .pos-grid input:focus-visible + span + i { outline: 2px solid var(--accent); outline-offset: 2px; }
   .out { display: grid; gap: 14px; min-width: 0; }
   #preview-wrap { display: contents; }
+  .out:has(#empty:not([hidden])) .actions { display: none; }
   .actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
   .actions .val { color: var(--fjord); }
   .btns { display: flex; gap: 8px; }

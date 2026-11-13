@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import StageEmpty from '../components/StageEmpty.astro';
 import ToolHeader from '../components/ToolHeader.astro';
 import DropZone from '../components/DropZone.astro';
 import Slider from '../components/Slider.astro';
@@ -34,7 +35,7 @@ const t = tools.find((x) => x.slug === 'color-palette')!;
     <section class="out" aria-label="Palette">
       <div class="stage">
         <canvas id="preview" hidden></canvas>
-        <p id="empty" class="stage-empty">Your photo and its palette appear here.</p>
+        <StageEmpty kind="palette">Drop a photo to pull its dominant colours and histogram.</StageEmpty>
       </div>
       <p id="status" class="hint" aria-live="polite"></p>
       <div id="swatches" class="swatches"></div>

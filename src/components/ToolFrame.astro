@@ -19,7 +19,7 @@ const { tool } = Astro.props;
   }
   .num { font: 300 40px/1 var(--font-display); color: var(--fjord); font-variant-numeric: tabular-nums; }
   .art { display: grid; place-items: center; padding: 10px 0; color: var(--text-dim); transition: color .2s; }
-  .name { font: 500 20px/1.2 var(--font-display); }
+  .name { font: 500 18px/1.2 var(--font-display); }
   .blurb { font: 400 13px/1.5 var(--font-body); color: var(--text-dim); }
   .tool-frame::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent);
@@ -28,5 +28,15 @@ const { tool } = Astro.props;
   .tool-frame:hover, .tool-frame:focus-visible { background: var(--surface-2); border-color: var(--accent); outline: none; }
   .tool-frame:hover .art, .tool-frame:focus-visible .art { color: var(--text); }
   .tool-frame:hover::after, .tool-frame:focus-visible::after { transform: scaleX(1); }
+  @media (max-width: 599px) {
+    .tool-frame {
+      grid-template-columns: 72px 1fr; grid-template-rows: auto auto; grid-template-areas: 'art name' 'art blurb';
+      column-gap: 16px; row-gap: 2px; align-items: center; min-height: 0; padding: 16px 18px;
+    }
+    .num { position: absolute; top: 8px; right: 12px; font-size: 12px; font-weight: 500; }
+    .art { grid-area: art; padding: 0; }
+    .name { grid-area: name; align-self: end; }
+    .blurb { grid-area: blurb; align-self: start; }
+  }
   @media (prefers-reduced-motion: no-preference) { .tool-frame::after { transition: transform .35s var(--ease); } }
 </style>

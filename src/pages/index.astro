@@ -7,8 +7,8 @@ import { tools, PRIVACY } from '../data/tools';
 <Base title="ApertureLab — free photography tools" description="Free, private photography tools that run entirely in your browser: depth of field, exposure, EXIF frames, panoramas, golden hour, print sizes and more.">
   <section class="hero develop">
     <p class="kicker">00 · Ten tools</p>
-    <h1>Free photography <em>calculators</em><br />and image tools.</h1>
-    <p class="lede">For working photographers. Everything runs on your own device and nothing leaves it. Nothing to install, no account.</p>
+    <h1>The maths and the finishing around every frame.</h1>
+    <p class="lede">Depth of field, ND exposure, golden hour, print sizes, mattes, collages and more. Ten free tools that run on your own device, with nothing to install and no account.</p>
   </section>
 
   <section class="sheet" aria-labelledby="sheet-title">
@@ -23,26 +23,22 @@ import { tools, PRIVACY } from '../data/tools';
   <section class="privacy-block develop" aria-labelledby="privacy-title">
     <h2 id="privacy-title">Your photos stay on your device.</h2>
     <p>{PRIVACY}</p>
-    <ul>
-      <li><strong>On-device</strong><span>Images are decoded and processed by your browser. They never leave your device.</span></li>
-      <li><strong>Free</strong><span>No subscriptions, no sign-up, open source.</span></li>
-    </ul>
+    <p class="how">Decoding, resizing, framing and export all run in this browser tab. The only thing stored is your own settings, on your own device.</p>
   </section>
 </Base>
 
 <style>
   .hero { padding-block: clamp(28px, 6vw, 72px) 40px; max-width: 980px; }
   .kicker { font: 600 12px/1 var(--font-display); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
-  h1 { margin-top: 18px; font-size: clamp(34px, 7vw, 76px); letter-spacing: -.02em; line-height: 1.05; font-weight: 500; overflow-wrap: anywhere; }
-  h1 em { font-style: normal; color: var(--accent); }
+  h1 { margin-top: 18px; text-wrap: balance; font-size: clamp(34px, 7vw, 76px); letter-spacing: -.02em; line-height: 1.05; font-weight: 500; overflow-wrap: anywhere; }
   .lede { margin-top: 22px; max-width: 58ch; color: var(--text-dim); font-size: 16px; font-family: var(--font-body); }
 
-  .frames { display: grid; gap: clamp(10px, 1.6vw, 18px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+  .frames { display: grid; gap: clamp(10px, 1.6vw, 18px); grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 600px) { .frames { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .frames { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
   .privacy-block { display: grid; gap: 18px; max-width: 980px; }
   .privacy-block h2 { font-size: clamp(28px, 4.5vw, 44px); letter-spacing: -.02em; }
   .privacy-block > p { color: var(--text-dim); max-width: 60ch; }
-  .privacy-block ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .privacy-block li { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-dim); }
-  .privacy-block strong { font: 500 20px/1 var(--font-display); color: var(--fjord); }
+  .privacy-block .how { max-width: 60ch; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-dim); }
 </style>
